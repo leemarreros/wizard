@@ -1,7 +1,6 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
+'use strict';
+
+import Login from './app/components/Login';
 
 import React, {
   AppRegistry,
@@ -12,40 +11,50 @@ import React, {
 } from 'react-native';
 
 class wizard extends Component {
-  render() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hideNavBar: true,
+      userInfo: null,
+      openSideMenu: false,
+    };
+  }
+  
+  renderScene (route, navigator) {
+    let Component = route.component;
+    let navBar = route.navigationBar;
+
+    if (navBar) {
+      navBar = React.cloneElement(navBar, { navigator, route, });
+    }
+
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
+      <View style={styles.app}>
+        {route.navigationBar}
+        <Component
+          route={route}
+          navigator={navigator}/>
       </View>
+    );
+  }
+  
+  render() {
+   return (
+      <Navigator
+        renderScene={this.renderScene.bind(this)}
+        initialRoute={{
+          component: Login,
+        }}
+      />
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  app: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+    position: 'relative',
+    backgroundColor: '#285DA1',
   },
 });
 

@@ -7,6 +7,8 @@ import React, {
   Component,
   StyleSheet,
   Text,
+  Navigator,
+  NavigatorIOS,
   View
 } from 'react-native';
 
@@ -54,7 +56,6 @@ const styles = StyleSheet.create({
   app: {
     flex: 1,
     position: 'relative',
-    backgroundColor: '#285DA1',
   },
 });
 

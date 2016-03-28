@@ -7,6 +7,7 @@ import SideMenu from 'react-native-side-menu';
 import Geocoder from 'react-native-geocoder';
 
 import People from  './People';
+import NavigationBarCom from  './NavigationBarCom';
 // import SideMenuLeft from '../utilComponents/SideMenuLeft'
 import {restUrl, brandFont, brandColor, backgroundClr, titleForm, navigationBar, buttonNavBar} from '../utils/globalVariables';
 import {requestHelper, } from '../utils/dbHelper';
@@ -38,12 +39,12 @@ export default class TabManager extends React.Component {
       zipcode: this.props.route.houseData.zipcode || '',
       city: this.props.route.houseData.city || '',
       state: this.props.route.houseData.state || '',
-      numBedrIn: this.props.route.houseData.bedrooms || 1,
-      numBedr: null,
+      bedrooms: this.props.route.houseData.bedrooms || 1,
     };
   }
   
   componentWillMount() {
+    console.log('this.props.route.houseData', this.props.route.houseData);
     this.props.route.events.addListener('burguerBtnEvent',
       (args) => {
         this.setState({openSideMenu: args});
@@ -64,7 +65,6 @@ export default class TabManager extends React.Component {
           latitude: userPosition.coords.latitude,
           longitude: userPosition.coords.longitude,
         }
-        console.log('coords', coords);
         Geocoder.reverseGeocodeLocation(coords, (err, data) => {
           if (err) { console.log(err); return;}
           this.setState({
@@ -95,22 +95,11 @@ export default class TabManager extends React.Component {
   switchToPeople() {
     this.props.navigator.push({
       component: People,
+      houseData: this.props.route.houseData,
       onBurguerMenuPress: this.props.route.onBurguerMenuPress.bind(this),
       navigationBar: (
-        <NavigationBar
-          title={{title: 'PEOPLE', tintColor: 'white'}}
-          style={navigationBar}
-          tintColor='#2981E8'
-          statusBar={{style: 'light-content', hidden: false}}
-          leftButton={
-            <TouchableOpacity
-              style={buttonNavBar}
-              onPress={this.props.route.onBurguerMenuPress.bind(this)}>
-              <Image
-                source={require('../img/burguer-icon.png')}
-                style={[{ width: 20, height: 15}]}/>
-            </TouchableOpacity>
-          }/>
+        <NavigationBarCom
+          title={'PEOPLE'}/>
       )
     });
   }
@@ -118,12 +107,13 @@ export default class TabManager extends React.Component {
     this.setState({savingData: true});
     var url = `${restUrl}/api/housedataupdate`;
     var body = {};
-    body.fbId = this.props.userInfo.fbId;
+    body.fbId = this.props.userInfo.id;
     !!this.state.address ? body.address = this.state.address : null;
     !!this.state.city ? body.city = this.state.city : null;
     !!this.state.state ? body.state = this.state.state : null;
     !!this.state.zipcode ? body.zipcode = this.state.zipcode : null;
-
+    body.bedrooms = this.state.bedrooms;
+    
     fetch(requestHelper(url, body, 'POST'))
     .then((response) => response.json())
     .then((responseData) => {
@@ -223,15 +213,15 @@ export default class TabManager extends React.Component {
                         maximumValue={10}
                         minimumTrackTintColor={'white'}
                         maximumTrackTintColor={'#D3D3D3'}
-                        value={this.state.numBedrIn} 
-                        onValueChange={(numBedr) => this.setState({numBedr})}/>
+                        value={this.state.bedrooms} 
+                        onValueChange={(bedrooms) => this.setState({bedrooms})}/>
                      <View style={styles.sliderInfo}>
                         <View style={{flex: 1}}><Text style={[styles.sliderInfoDet, {textAlign: 'left'}]}>1</Text></View>
                         <View style={{flex: 1}}><Text style={[styles.sliderInfoDet, {textAlign: 'right'}]}>10</Text></View>
                      </View>
                      <View style={styles.bedInfo}>
                         <Text style={styles.sliderInfoDet}>
-                            Total bedrooms: {this.state.numBedr ? this.state.numBedr : this.state.numBedrIn}
+                            Total bedrooms: {this.state.bedrooms}
                         </Text>
                      </View>
                 </View>

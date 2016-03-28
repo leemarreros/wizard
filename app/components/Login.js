@@ -7,6 +7,8 @@ import FBSDKCore from 'react-native-fbsdkcore';
 import FBSDKLogin from 'react-native-fbsdklogin';
 
 import House from  './House';
+import NavigationBarCom from  './NavigationBarCom';
+
 import {restUrl, brandFont, brandColor, backgroundClr, navigationBar, buttonNavBar} from '../utils/globalVariables';
 import {requestHelper, } from '../utils/dbHelper';
 
@@ -83,20 +85,9 @@ class Login extends React.Component {
       onBurguerMenuPress: this.onBurguerMenuPress.bind(this),
       onLogOutPress: this.onLogOutPress.bind(this),
       navigationBar: (
-        <NavigationBar
-          title={{title: 'HOUSE', tintColor: 'white'}}
-          style={navigationBar}
-          tintColor='#2981E8'
-          statusBar={{style: 'light-content', hidden: false}}
-          leftButton={
-            <TouchableOpacity
-              style={buttonNavBar}
-              onPress={this.onBurguerMenuPress.bind(this)}>
-              <Image
-                source={require('../img/burguer-icon.png')}
-                style={[{ width: 20, height: 15}]}/>
-            </TouchableOpacity>
-          }/>
+        <NavigationBarCom 
+            title={'HOUSE'}
+            onBurguerMenuPress={this.onBurguerMenuPress.bind(this)}/>
       )
     });
   }

@@ -5,8 +5,10 @@ import Dimensions from 'Dimensions';
 import NavigationBar from 'react-native-navbar';
 import FBSDKCore from 'react-native-fbsdkcore';
 import FBSDKLogin from 'react-native-fbsdklogin';
-import {restUrl, brandFont, brandColor} from '../utils/globalVariables';
-// import helpers from '../utils/dbHelper';
+
+import House from  './House';
+import {restUrl, brandFont, brandColor, backgroundClr, navigationBar, buttonNavBar} from '../utils/globalVariables';
+import {requestHelper, } from '../utils/dbHelper';
 
 var EventEmitter = require('EventEmitter');
 var window = Dimensions.get('window');
@@ -42,6 +44,7 @@ class Login extends React.Component {
     super(props);
     this.state = {
       openSideMenu: false,
+      houseData: null,
     };
   }
 
@@ -72,30 +75,31 @@ class Login extends React.Component {
     }
   }
 
-//   switchToTabManager() {
-//     this.props.navigator.push({
-//       component: TabManager,
-//       events: this.eventEmitter,
-//       onBurguerMenuPress: this.onBurguerMenuPress.bind(this),
-//       onLogOutPress: this.onLogOutPress.bind(this),
-//       navigationBar: (
-//         <NavigationBar
-//           title={<Image style={{width: 55, height: 25}} source={require('../img/logo-as-title.png')}/>}
-//           style={styles.navigationBar}
-//           tintColor={'#285DA1'}
-//           statusBar={{style: 'light-content', hidden: false}}
-//           leftButton={
-//             <TouchableOpacity
-//               style={styles.buttonNavBar}
-//               onPress={this.onBurguerMenuPress.bind(this)}>
-//               <Image
-//                 source={require('../img/burguer-menu.png')}
-//                 style={[{ width: 20, height: 15}]}/>
-//             </TouchableOpacity>
-//           }/>
-//       )
-//     });
-//   }
+  switchToHouse() {
+    this.props.navigator.push({
+      component: House,
+      events: this.eventEmitter,
+      houseData: this.state.houseData,
+      onBurguerMenuPress: this.onBurguerMenuPress.bind(this),
+      onLogOutPress: this.onLogOutPress.bind(this),
+      navigationBar: (
+        <NavigationBar
+          title={{title: 'HOUSE', tintColor: 'white'}}
+          style={navigationBar}
+          tintColor='#2981E8'
+          statusBar={{style: 'light-content', hidden: false}}
+          leftButton={
+            <TouchableOpacity
+              style={buttonNavBar}
+              onPress={this.onBurguerMenuPress.bind(this)}>
+              <Image
+                source={require('../img/burguer-icon.png')}
+                style={[{ width: 20, height: 15}]}/>
+            </TouchableOpacity>
+          }/>
+      )
+    });
+  }
 
   async getAccesToken() {
     var responseToken = await (FBSDKAccessToken.getCurrentAccessToken((token) => {
@@ -111,13 +115,26 @@ class Login extends React.Component {
           this.alertIOS('Error logging in', 'Please try again!');
           return;
         }
+        this.props.route.setUserInformation(userInfo);
 
-        var url = `${restUrl}/api/loginfb`;
+        var url = `${restUrl}/api/authfb`;
         var body = {
-          fbId: userInfo.id,
+          firstname: userInfo.first_name,
+          lastname: userInfo.last_name,
+          picture: `https://graph.facebook.com/${userInfo.id}/picture?height=400`,
+          fbId: userInfo.id
         };
-
-      }, 'me?fields=first_name,last_name,picture');
+        
+        fetch(requestHelper(url, body, 'POST'))
+        .then((response) => response.json())
+        .then((responseData) => {
+            console.log('responseData', responseData.status);
+            this.setState({houseData: responseData.houseData})
+            this.switchToHouse();
+        })
+        .done();
+        
+      }, 'me?fields=first_name,last_name');
 
       fetchProfileRequest.start(0);
     }));
@@ -197,18 +214,6 @@ var styles = StyleSheet.create({
     width: window.width * 0.8,
     justifyContent: 'space-around',
     marginTop: 100
-  },
-  navigationBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  buttonNavBar: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: 12,
-    paddingBottom: 12,
   },
   navigator: {
     backgroundColor: 'yellow',

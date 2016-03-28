@@ -29,6 +29,7 @@
 		9F1B74341CA8C0E900BE56E9 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F1B74311CA8C0E900BE56E9 /* FBSDKLoginKit.framework */; settings = {ASSET_TAGS = (); }; };
 		9F1B74411CA8C1A400BE56E9 /* libRCTFBSDKLogin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F1B74401CA8C15700BE56E9 /* libRCTFBSDKLogin.a */; };
 		9F1B74421CA8C1A900BE56E9 /* libRCTFBSDKCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F1B743A1CA8C14F00BE56E9 /* libRCTFBSDKCore.a */; };
+		9F1B74491CA9AE0800BE56E9 /* libRNGeocoder.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F1B74481CA9ADFC00BE56E9 /* libRNGeocoder.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -123,6 +124,13 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RCTFBSDKLogin;
 		};
+		9F1B74471CA9ADFC00BE56E9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9F1B74431CA9ADFB00BE56E9 /* RNGeocoder.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BF8FCF941BFFB184000FCD37;
+			remoteInfo = RNGeocoder;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -154,6 +162,7 @@
 		9F1B74311CA8C0E900BE56E9 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../../FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		9F1B74351CA8C14F00BE56E9 /* RCTFBSDKCore.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTFBSDKCore.xcodeproj; path = "../node_modules/react-native-fbsdkcore/RCTFBSDKCore.xcodeproj"; sourceTree = "<group>"; };
 		9F1B743B1CA8C15700BE56E9 /* RCTFBSDKLogin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTFBSDKLogin.xcodeproj; path = "../node_modules/react-native-fbsdklogin/RCTFBSDKLogin.xcodeproj"; sourceTree = "<group>"; };
+		9F1B74431CA9ADFB00BE56E9 /* RNGeocoder.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNGeocoder.xcodeproj; path = "../node_modules/react-native-geocoder/RNGeocoder.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,6 +179,7 @@
 			files = (
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				9F1B74421CA8C1A900BE56E9 /* libRCTFBSDKCore.a in Frameworks */,
+				9F1B74491CA9AE0800BE56E9 /* libRNGeocoder.a in Frameworks */,
 				9F1B74411CA8C1A400BE56E9 /* libRCTFBSDKLogin.a in Frameworks */,
 				9F1B74341CA8C0E900BE56E9 /* FBSDKLoginKit.framework in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
@@ -295,6 +305,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				9F1B74431CA9ADFB00BE56E9 /* RNGeocoder.xcodeproj */,
 				9F1B743B1CA8C15700BE56E9 /* RCTFBSDKLogin.xcodeproj */,
 				9F1B74351CA8C14F00BE56E9 /* RCTFBSDKCore.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
@@ -373,6 +384,14 @@
 			isa = PBXGroup;
 			children = (
 				9F1B74401CA8C15700BE56E9 /* libRCTFBSDKLogin.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9F1B74441CA9ADFB00BE56E9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9F1B74481CA9ADFC00BE56E9 /* libRNGeocoder.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -491,6 +510,10 @@
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
 				},
+				{
+					ProductGroup = 9F1B74441CA9ADFB00BE56E9 /* Products */;
+					ProjectRef = 9F1B74431CA9ADFB00BE56E9 /* RNGeocoder.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -583,6 +606,13 @@
 			fileType = archive.ar;
 			path = libRCTFBSDKLogin.a;
 			remoteRef = 9F1B743F1CA8C15700BE56E9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		9F1B74481CA9ADFC00BE56E9 /* libRNGeocoder.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNGeocoder.a;
+			remoteRef = 9F1B74471CA9ADFC00BE56E9 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

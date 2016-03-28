@@ -34,10 +34,15 @@ class wizard extends Component {
       <View style={styles.app}>
         {route.navigationBar}
         <Component
+          userInfo={this.state.userInfo}
           route={route}
           navigator={navigator}/>
       </View>
     );
+  }
+  
+   setUserInformation(userInfo) {
+    this.setState({userInfo});
   }
   
   render() {
@@ -46,6 +51,7 @@ class wizard extends Component {
         renderScene={this.renderScene.bind(this)}
         initialRoute={{
           component: Login,
+          setUserInformation: this.setUserInformation.bind(this)
         }}
       />
     );

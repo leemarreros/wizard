@@ -1,6 +1,9 @@
 'use strict';
 
 import Login from './app/components/Login';
+import SideMenu from 'react-native-side-menu';
+import SideMenuLeft from './app/components/SideMenuLeft';
+var EventEmitter = require('EventEmitter');
 
 import React, {
   AppRegistry,
@@ -47,13 +50,11 @@ class wizard extends Component {
   
   render() {
    return (
-      <Navigator
-        renderScene={this.renderScene.bind(this)}
-        initialRoute={{
-          component: Login,
-          setUserInformation: this.setUserInformation.bind(this)
-        }}
-      />
+        <Navigator
+            renderScene={this.renderScene.bind(this)}
+            initialRoute={{
+            component: Login,
+            setUserInformation: this.setUserInformation.bind(this)}}/>
     );
   }
 }

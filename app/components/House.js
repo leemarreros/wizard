@@ -44,7 +44,6 @@ export default class TabManager extends React.Component {
   }
   
   componentWillMount() {
-    console.log('this.props.route.houseData', this.props.route.houseData);
     this.props.route.events.addListener('burguerBtnEvent',
       (args) => {
         this.setState({openSideMenu: args});
@@ -54,7 +53,7 @@ export default class TabManager extends React.Component {
 
   onChangeSideMenu(isOpen) {
     if (isOpen === false) {
-      this.props.route.onBurguerMenuPress(false);
+        this.props.route.onBurguerMenuPress(false);
     }
   }
 
@@ -95,10 +94,12 @@ export default class TabManager extends React.Component {
   switchToPeople() {
     this.props.navigator.push({
       component: People,
+      events: this.props.route.events,
       houseData: this.props.route.houseData,
       onBurguerMenuPress: this.props.route.onBurguerMenuPress.bind(this),
       navigationBar: (
         <NavigationBarCom
+          onBurguerMenuPress={this.props.route.onBurguerMenuPress.bind(this)}
           title={'PEOPLE'}/>
       )
     });
@@ -132,108 +133,108 @@ export default class TabManager extends React.Component {
         isOpen={this.state.openSideMenu}>
         <View style={{flex: 1, backgroundColor: backgroundClr}}>
             <View style={styles.wrapTitleF}>
-                <Text style={styles.titleForm}>My Household</Text>
+                <Text style={titleForm}>My Household</Text>
             </View>
             
             
-                <View style={styles.titleFieldBar}>
-                    <View style={{flex: 1}}>
-                    <Text style={styles.fieldName}>ADDRESS</Text>
-                    </View>
-                    <View style={{flex: 1, flexDirection: 'row'}}>
-                    <ActivityIndicatorIOS
-                        animating={this.state.animatingPos}
-                        style={{height: 20}}
-                        size="small"/>
-                    <TouchableOpacity
-                        onPress={this.onPressCurrentPosition.bind(this)}
-                        style={{flex: 1}}>
-                        <Text
-                        style={[styles.fieldName, {textAlign: 'right', marginRight: 15, fontWeight: 'bold'}]}>
-                        GET CURRENT POSITION
-                        </Text>
-                    </TouchableOpacity>
-                    </View>
+            <View style={styles.titleFieldBar}>
+                <View style={{flex: 1}}>
+                <Text style={styles.fieldName}>ADDRESS</Text>
                 </View>
-                
-                <View style={styles.fieldContainer}>
-                    <View style={{flex: 1, borderBottomColor: '#D1D1D1', borderBottomWidth: 0.5}}>
-                    <TextInput
-                        value={this.state.address}
-                        style={styles.inputBox}
-                        placeholder="Address"
-                        placeholderTextColor={'#DADADA'}
-                        onChangeText={(address) => this.setState({address})}/>
-                    </View>
-                </View>
-                
-                <View style={styles.fieldContainer}>
-                    <View style={{flex: 1, borderBottomColor: '#D1D1D1', borderBottomWidth: 0.5}}>
-                    <TextInput
-                        value={this.state.zipcode}
-                        style={styles.inputBox}
-                        placeholderTextColor={'#DADADA'}
-                        keyboardType={'numeric'}
-                        placeholder="Zipcode"
-                        onChangeText={(zipcode) => this.setState({zipcode})}/>
-                    </View>
-                </View>
-                
-                
-                <View style={styles.fieldContainer}>
-                    <View style={{flex: 1, borderLeftColor: '#D1D1D1', borderLeftWidth: 0.5}}>
-                    <TextInput
-                        value={this.state.city}
-                        style={styles.inputBox}
-                        placeholderTextColor={'#DADADA'}
-                        placeholder="City"
-                        onChangeText={(city) => this.setState({city})}/>
-                    </View>
-                    <View style={{flex: 1}}>
-                    <TextInput
-                        value={this.state.state}
-                        style={styles.inputBox}
-                        placeholderTextColor={'#DADADA'}
-                        placeholder="State"
-                        onChangeText={(state) => this.setState({state})}/>
-                    </View>
-                </View>
-                
-                <View style={styles.titleFieldBar}>
-                    <View style={{flex: 1}}>
-                        <Text style={styles.fieldName}>BEDROOMS</Text>
-                    </View>
-                </View>
-                
-                <View style={styles.wrapperSlider}>
-                    <SliderIOS
-                        style={styles.slider}
-                        step={1}
-                        minimumValue={1}
-                        maximumValue={10}
-                        minimumTrackTintColor={'white'}
-                        maximumTrackTintColor={'#D3D3D3'}
-                        value={this.state.bedrooms} 
-                        onValueChange={(bedrooms) => this.setState({bedrooms})}/>
-                     <View style={styles.sliderInfo}>
-                        <View style={{flex: 1}}><Text style={[styles.sliderInfoDet, {textAlign: 'left'}]}>1</Text></View>
-                        <View style={{flex: 1}}><Text style={[styles.sliderInfoDet, {textAlign: 'right'}]}>10</Text></View>
-                     </View>
-                     <View style={styles.bedInfo}>
-                        <Text style={styles.sliderInfoDet}>
-                            Total bedrooms: {this.state.bedrooms}
-                        </Text>
-                     </View>
-                </View>
-                
+                <View style={{flex: 1, flexDirection: 'row'}}>
+                <ActivityIndicatorIOS
+                    animating={this.state.animatingPos}
+                    style={{height: 20}}
+                    size="small"/>
                 <TouchableOpacity
-                    onPress={this.handleSavePress.bind(this)} 
-                    style={styles.buttonNext}>
-                    <View style={styles.btnContent}>
-                        <Text style={styles.btnNextText}>Add people</Text>
-                        <Image source={require('../img/next-icon.png')}/>
-                    </View>
+                    onPress={this.onPressCurrentPosition.bind(this)}
+                    style={{flex: 1}}>
+                    <Text
+                    style={[styles.fieldName, {textAlign: 'right', marginRight: 15, fontWeight: 'bold'}]}>
+                    GET CURRENT POSITION
+                    </Text>
                 </TouchableOpacity>
+                </View>
+            </View>
+            
+            <View style={styles.fieldContainer}>
+                <View style={{flex: 1, borderBottomColor: '#D1D1D1', borderBottomWidth: 0.5}}>
+                <TextInput
+                    value={this.state.address}
+                    style={styles.inputBox}
+                    placeholder="Address"
+                    placeholderTextColor={'#DADADA'}
+                    onChangeText={(address) => this.setState({address})}/>
+                </View>
+            </View>
+            
+            <View style={styles.fieldContainer}>
+                <View style={{flex: 1, borderBottomColor: '#D1D1D1', borderBottomWidth: 0.5}}>
+                <TextInput
+                    value={this.state.zipcode}
+                    style={styles.inputBox}
+                    placeholderTextColor={'#DADADA'}
+                    keyboardType={'numeric'}
+                    placeholder="Zipcode"
+                    onChangeText={(zipcode) => this.setState({zipcode})}/>
+                </View>
+            </View>
+            
+            
+            <View style={styles.fieldContainer}>
+                <View style={{flex: 1, borderLeftColor: '#D1D1D1', borderLeftWidth: 0.5}}>
+                <TextInput
+                    value={this.state.city}
+                    style={styles.inputBox}
+                    placeholderTextColor={'#DADADA'}
+                    placeholder="City"
+                    onChangeText={(city) => this.setState({city})}/>
+                </View>
+                <View style={{flex: 1}}>
+                <TextInput
+                    value={this.state.state}
+                    style={styles.inputBox}
+                    placeholderTextColor={'#DADADA'}
+                    placeholder="State"
+                    onChangeText={(state) => this.setState({state})}/>
+                </View>
+            </View>
+            
+            <View style={styles.titleFieldBar}>
+                <View style={{flex: 1}}>
+                    <Text style={styles.fieldName}>BEDROOMS</Text>
+                </View>
+            </View>
+            
+            <View style={styles.wrapperSlider}>
+                <SliderIOS
+                    style={styles.slider}
+                    step={1}
+                    minimumValue={1}
+                    maximumValue={10}
+                    minimumTrackTintColor={'white'}
+                    maximumTrackTintColor={'#D3D3D3'}
+                    value={this.state.bedrooms} 
+                    onValueChange={(bedrooms) => this.setState({bedrooms})}/>
+                    <View style={styles.sliderInfo}>
+                    <View style={{flex: 1}}><Text style={[styles.sliderInfoDet, {textAlign: 'left'}]}>1</Text></View>
+                    <View style={{flex: 1}}><Text style={[styles.sliderInfoDet, {textAlign: 'right'}]}>10</Text></View>
+                    </View>
+                    <View style={styles.bedInfo}>
+                    <Text style={styles.sliderInfoDet}>
+                        Total bedrooms: {this.state.bedrooms}
+                    </Text>
+                    </View>
+            </View>
+            
+            <TouchableOpacity
+                onPress={this.handleSavePress.bind(this)} 
+                style={styles.buttonNext}>
+                <View style={styles.btnContent}>
+                    <Text style={styles.btnNextText}>Add people</Text>
+                    <Image source={require('../img/next-icon.png')}/>
+                </View>
+            </TouchableOpacity>
         </View>
       </SideMenu>
     );
@@ -245,10 +246,6 @@ var styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       marginVertical: 10
-  },
-  titleForm,
-  wrapperForm: {
-      
   },
   titleFieldBar: {
     alignItems: 'center',

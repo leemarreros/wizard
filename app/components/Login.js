@@ -65,6 +65,7 @@ class Login extends React.Component {
   }
 
   onBurguerMenuPress(bool) {
+    console.log('burguer menu pressed');
     if (!this.opened) {
       this.eventEmitter.emit('burguerBtnEvent', true);
       this.opened = true;

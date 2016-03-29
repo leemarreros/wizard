@@ -2,8 +2,11 @@
 
 import React from 'react-native';
 import Dimensions from 'Dimensions';
+import SideMenu from 'react-native-side-menu';
 
 import AddPeople from  './AddPeople';
+import NavigationBarCom from  './NavigationBarCom';
+
 import {restUrl, brandFont, brandColor, backgroundClr, titleForm, navigationBar, buttonNavBar} from '../utils/globalVariables';
 import {requestHelper, } from '../utils/dbHelper';
 
@@ -24,9 +27,15 @@ export default class People extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+        openSideMenu: false,
     };
   }
-  
+ 
+  onChangeSideMenu(isOpen) {
+    if (isOpen === false) {
+      this.props.route.onBurguerMenuPress(false);
+    }
+  } 
   
   retrievePeople() {
     var people = this.props.route.houseData.people;
@@ -35,54 +44,57 @@ export default class People extends React.Component {
   
   componentWillMount() {
     //   this.retrievePeople();
+    this.props.route.events.addListener('burguerBtnEvent',
+      (args) => {
+        this.setState({openSideMenu: args});
+      });
   }
   
   onAddPeoplePress() {
+      var route = this.props.route;
       this.props.navigator.push({
-        component: AddPeople,
-        navigationBar: (
-            <NavigationBar
-            title={{title: 'PEOPLE', tintColor: 'white'}}
-            style={navigationBar}
-            tintColor='#2981E8'
-            statusBar={{style: 'light-content', hidden: false}}
-            leftButton={
-                <TouchableOpacity
-                style={buttonNavBar}
-                onPress={this.props.route.onBurguerMenuPress.bind(this)}>
-                <Image
-                    source={require('../img/burguer-icon.png')}
-                    style={[{ width: 20, height: 15}]}/>
-                </TouchableOpacity>
-            }/>
-        )
+            component: AddPeople,
+            events: route.events,
+            onBurguerMenuPress: route.onBurguerMenuPress.bind(this),
+            navigationBar: (
+                <NavigationBarCom 
+                    title={'PEOPLE'}
+                    navigator={this.props.navigator}
+                    onBackBtnPress={true}/>
+            )
         });
   }
 
   render() {
     return (
-        <View style={{flex: 1, backgroundColor: backgroundClr}}>
-            <ScrollView
-                scrollEventThrottle={200}
-                style={styles.scrollView}>
-                
-                    <TouchableOpacity 
-                        style={styles.btnAddPeople}
-                        onPress={this.onAddPeoplePress.bind(this)}>
-                        <View style={styles.btnContent}>
-                            <Image source={require('../img/add-people-btn.png')}/>
-                            <Text style={styles.txtBtn}>+ Add People</Text>
-                        </View>
-                    </TouchableOpacity>
+        <SideMenu
+            openMenuOffset={window.width/2}
+            disableGestures={true}
+            onChange={this.onChangeSideMenu.bind(this)}
+            isOpen={this.state.openSideMenu}>
+                <View style={{flex: 1, backgroundColor: backgroundClr}}>
+                    <ScrollView
+                        scrollEventThrottle={200}
+                        style={styles.scrollView}>
+                        
+                            <TouchableOpacity 
+                                style={styles.btnAddPeople}
+                                onPress={this.onAddPeoplePress.bind(this)}>
+                                <View style={styles.btnContent}>
+                                    <Image source={require('../img/add-people-btn.png')}/>
+                                    <Text style={styles.txtBtn}>+ Add People</Text>
+                                </View>
+                            </TouchableOpacity>
+                            
+                            
+                            
+                        </ScrollView>
                     
-                    
-                    
-                </ScrollView>
-            
-            <View>
-                
-            </View>
-        </View>
+                    <View>
+                        
+                    </View>
+                </View>
+        </SideMenu>
     );
   }
 }

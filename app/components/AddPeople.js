@@ -69,10 +69,10 @@ export default class AddPeople extends React.Component {
         !!this.state.age ? body.age = this.state.age : null;
         this.state.male ? body.gender = 'male' : null;
         this.state.female ? body.gender = 'female' : null;
-        console.log('Addpeople body', body);
         fetch(requestHelper(url, body, 'POST'))
         .then((response) => response.json())
         .then((responseData) => {
+            this.props.route.updatePeopleData();
             this.setState({savingData: false});
             this.props.navigator.pop();
         })
@@ -80,7 +80,6 @@ export default class AddPeople extends React.Component {
     }
     
     render() {
-        console.log('openSideMenu', this.state.openSideMenu);
         return (
             <View style={{flex: 1, backgroundColor: backgroundClr}}>
                 

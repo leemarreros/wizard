@@ -120,7 +120,6 @@ class Login extends React.Component {
         fetch(requestHelper(url, body, 'POST'))
         .then((response) => response.json())
         .then((responseData) => {
-            console.log('responseData', responseData.status);
             this.setState({houseData: responseData.houseData})
             this.switchToHouse();
         })

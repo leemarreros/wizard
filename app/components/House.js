@@ -44,6 +44,11 @@ export default class TabManager extends React.Component {
   }
   
   componentWillMount() {
+    this.address = this.props.route.houseData.address || '';
+    this.zipcode = this.props.route.houseData.zipcode || '';
+    this.city = this.props.route.houseData.city || '';
+    this.state = this.props.route.houseData.state || '';
+    this.bedrooms = this.props.route.houseData.bedrooms || 1;
     this.props.route.events.addListener('burguerBtnEvent',
       (args) => {
         this.setState({openSideMenu: args});
@@ -91,6 +96,15 @@ export default class TabManager extends React.Component {
     );
   }
   
+  newHouseData() {
+      if (this.address == this.state.address &&
+          this.zipcode == this.state.zipcode &&
+          this.city == this.state.city &&
+          this.state == this.state.state &&
+          this.bedrooms == this.state.bedrooms) return true;
+      return false;
+  }
+  
   switchToPeople() {
     this.props.navigator.push({
       component: People,
@@ -115,13 +129,18 @@ export default class TabManager extends React.Component {
     !!this.state.zipcode ? body.zipcode = this.state.zipcode : null;
     body.bedrooms = this.state.bedrooms;
     
-    fetch(requestHelper(url, body, 'POST'))
-    .then((response) => response.json())
-    .then((responseData) => {
-        this.setState({savingData: false});
-        this.switchToPeople()
-    })
-    .done();
+    if (this.newHouseData()) {
+        fetch(requestHelper(url, body, 'POST'))
+        .then((response) => response.json())
+        .then((responseData) => {
+            this.setState({savingData: false});
+            this.switchToPeople()
+        })
+        .done();
+    } else {
+            this.switchToPeople();
+            this.setState({savingData: false});
+    }
   }
   
   render() {

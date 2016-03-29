@@ -18,6 +18,7 @@ let {
   Image,
   StyleSheet,
   ScrollView,
+  AlertIOS,
   ProgressViewIOS,
   TouchableOpacity
 } = React;
@@ -28,8 +29,8 @@ export default class People extends React.Component {
     super(props);
     this.state = {
         openSideMenu: false,
-        firstTimeRetrieve: true,
         people: null,
+        updatePeopleData: false,
     };
   }
  
@@ -39,20 +40,33 @@ export default class People extends React.Component {
     }
   } 
   
-  retrievePeople() {
+  retrievePeopleData() {
     var people;
-    if (!this.state.firstTimeRetrieve) {
-        
+    this.setState({updatePeopleData: true})
+    if (!this.firstTimeRetrieve) {
+        var url = `${restUrl}/api/peopledata/${this.props.userInfo.id}`;
+        fetch(url)
+        .then((response) => response.json())
+        .then((responseData) => {
+            people = responseData.peopleData.people;
+            this.setState({people, updatePeopleData: false});
+        })
+        .done();
     } else {
-        this.setState({firstTimeRetrieve: false});
         people = this.props.route.houseData.people;
-        this.setState({people});
+        this.setState({people, updatePeopleData: false});
     }
     
   }
   
+  updatePeopleData() {
+    this.firstTimeRetrieve = false;
+    this.retrievePeopleData();
+  }
+  
   componentWillMount() {
-    this.retrievePeople();
+    this.firstTimeRetrieve = true;
+    this.retrievePeopleData();
     this.props.route.events.addListener('burguerBtnEvent',
       (args) => {
         this.setState({openSideMenu: args});
@@ -64,6 +78,7 @@ export default class People extends React.Component {
       this.props.navigator.push({
             component: AddPeople,
             events: route.events,
+            updatePeopleData: this.updatePeopleData.bind(this),
             onBurguerMenuPress: route.onBurguerMenuPress.bind(this),
             navigationBar: (
                 <NavigationBarCom 
@@ -72,6 +87,32 @@ export default class People extends React.Component {
                     onBackBtnPress={true}/>
             )
         });
+  }
+  
+  onHandleDeletePerson(personId) {
+      var people;
+      this.setState({updatePeopleData: true})      
+      function deletePerson() {
+          var url = `${restUrl}/api/deleteperson`;
+          var body = {
+                _id: personId,
+                fbId: this.props.userInfo.id
+            };
+
+            fetch(requestHelper(url, body, 'POST'))
+            .then((response) => response.json())
+            .then((responseData) => {
+                people = responseData.peopleData.people;
+                this.setState({people, updatePeopleData: false});
+            })
+            .done();
+      }
+      AlertIOS.alert('Remove Person', 'Are you sure?',
+      [
+        {text: 'CANCEL', onPress: () => console.log('Cancel Pressed')},
+        {text: 'OK', onPress: deletePerson.bind(this)},
+      ]
+    )
   }
 
   render() {
@@ -102,7 +143,13 @@ export default class People extends React.Component {
                                         <View style={styles.wrapperCircle}>
                                             <View style={[styles.circle, male ? styles.male : styles.female]}>
                                                 <Text style={styles.oneLetter}>{person.firstname[0]}</Text>
-                                                <TouchableOpacity style={styles.deleteIconBtn}><Image style={styles.imgDeleteIcon} source={require('../img/delete-person-icon.png')}/></TouchableOpacity>
+                                                <TouchableOpacity 
+                                                    style={styles.deleteIconBtn} 
+                                                    onPress={this.onHandleDeletePerson.bind(this, person._id)}>
+                                                        <Image 
+                                                            style={styles.imgDeleteIcon} 
+                                                            source={require('../img/delete-person-icon.png')}/>
+                                                </TouchableOpacity>
                                             </View>
                                         </View>
                                         <View style={styles.wrapperText}>

@@ -27,7 +27,7 @@ let {
   ActivityIndicatorIOS
 } = React;
 
-export default class TabManager extends React.Component {
+export default class House extends React.Component {
 
   constructor(props) {
     super(props);
@@ -44,15 +44,16 @@ export default class TabManager extends React.Component {
   }
   
   componentWillMount() {
-    this.address = this.props.route.houseData.address || '';
-    this.zipcode = this.props.route.houseData.zipcode || '';
-    this.city = this.props.route.houseData.city || '';
-    this.state = this.props.route.houseData.state || '';
-    this.bedrooms = this.props.route.houseData.bedrooms || 1;
-    this.props.route.events.addListener('burguerBtnEvent',
-      (args) => {
-        this.setState({openSideMenu: args});
-      });
+    this.addressIn = this.props.route.houseData.address || '';
+    this.zipcodeIn = this.props.route.houseData.zipcode || '';
+    this.cityIn = this.props.route.houseData.city || '';
+    this.stateIn = this.props.route.houseData.state || '';
+    this.bedroomsIn = this.props.route.houseData.bedrooms || 1;
+    
+    // this.props.route.events.addListener('burguerBtnEvent',
+    //   (args) => {
+    //     this.setState({openSideMenu: args});
+    //   });
   }
 
 
@@ -97,11 +98,11 @@ export default class TabManager extends React.Component {
   }
   
   newHouseData() {
-      if (this.address == this.state.address &&
-          this.zipcode == this.state.zipcode &&
-          this.city == this.state.city &&
-          this.state == this.state.state &&
-          this.bedrooms == this.state.bedrooms) return true;
+      if (this.addressIn == this.state.address &&
+          this.zipcodeIn == this.state.zipcode &&
+          this.cityIn == this.state.city &&
+          this.stateIn == this.state.state &&
+          this.bedroomsIn == this.state.bedrooms) return true;
       return false;
   }
   
@@ -118,6 +119,7 @@ export default class TabManager extends React.Component {
       )
     });
   }
+  
   handleSavePress() {
     this.setState({savingData: true});
     var url = `${restUrl}/api/housedataupdate`;
@@ -319,13 +321,14 @@ var styles = StyleSheet.create({
       marginHorizontal: 10,
   },
   buttonNext: {
+    position: 'absolute',
     alignItems: 'center',
     width: window.width,
     height: 43,
     backgroundColor: '#FFEC00',
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 122
+    bottom: 0
   },
   btnContent: {
       flexDirection: 'row',

@@ -1,0 +1,264 @@
+'use strict';
+
+import React from 'react-native';
+import Dimensions from 'Dimensions';
+import NavigationBar from 'react-native-navbar';
+import SideMenu from 'react-native-side-menu';
+import NavigationBarCom from  './NavigationBarCom';
+
+import AddCars from  './AddCars';
+
+var window = Dimensions.get('window');
+import {
+    restUrl, 
+    brandFont, 
+    brandColor, 
+    backgroundClr, 
+    titleForm,
+    buttonNext,
+    btnContent,
+    btnNextText,
+    navigationBar, 
+    buttonNavBar} from '../utils/globalVariables';
+
+import {requestHelper, } from '../utils/dbHelper';
+
+let {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  AlertIOS,
+  ProgressViewIOS,
+  TouchableOpacity
+} = React;
+
+export default class Cars extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+        openSideMenu: false,
+        cars: null,
+        updateCarsData: false,
+    };
+  }
+  
+  onChangeSideMenu(isOpen) {
+    if (isOpen === false) {
+      this.props.route.onBurguerMenuPress(false);
+    }
+  }
+  
+  componentWillMount() {
+    this.firstTimeRetrieve = true;
+    this.retrieveCarsData();
+    this.props.route.events.addListener('burguerBtnEvent',
+      (args) => {
+        this.setState({openSideMenu: args});
+      });
+  }
+  
+  updateCarsData() {
+    this.firstTimeRetrieve = false;
+    this.retrieveCarsData();
+  }
+  
+  retrieveCarsData() {
+    var cars;
+    this.setState({updateCarsData: true})
+    if (!this.firstTimeRetrieve) {
+        var url = `${restUrl}/api/carsdata/${this.props.userInfo.id}`;
+        fetch(url)
+        .then((response) => response.json())
+        .then((responseData) => {
+            cars = responseData.carsData.cars;
+            this.setState({cars, updateCarsData: false});
+        })
+        .done();
+    } else {
+        cars = this.props.route.houseData.cars;
+        this.setState({cars, updateCarsData: false});
+    }
+    
+  }
+  
+  onHandleDeletePerson(carId, ownerId) {
+      var cars;
+      this.setState({updateCarsData: true})      
+      function deleteCar() {
+          var url = `${restUrl}/api/deletecar`;
+          var body = {
+                personId: ownerId,
+                _id: carId,
+                fbId: this.props.userInfo.id
+            };
+
+            fetch(requestHelper(url, body, 'POST'))
+            .then((response) => response.json())
+            .then((responseData) => {
+                cars = responseData.carsData.cars;
+                this.setState({cars, updateCarsData: false});
+            })
+            .done();
+      }
+      AlertIOS.alert('Remove Car', 'Are you sure?',
+      [
+        {text: 'CANCEL', onPress: () => console.log('Cancel Pressed')},
+        {text: 'OK', onPress: deleteCar.bind(this)},
+      ]
+    )
+  }
+    
+  onAddCarsPress() {
+      var route = this.props.route;
+      this.props.navigator.push({
+            component: AddCars,
+            events: route.events,
+            people: this.props.route.people,
+            updateCarsData: this.updateCarsData.bind(this),
+            onBurguerMenuPress: route.onBurguerMenuPress.bind(this),
+            navigationBar: (
+                <NavigationBarCom 
+                    title={'VEHICLES'}
+                    navigator={this.props.navigator}
+                    onBackBtnPress={true}/>
+            )
+        });
+  }
+
+  render() {
+    return (
+      <SideMenu
+            openMenuOffset={window.width/2}
+            disableGestures={true}
+            onChange={this.onChangeSideMenu.bind(this)}
+            isOpen={this.state.openSideMenu}>
+            <View style={{flex: 1, backgroundColor: backgroundClr}}>
+                <ScrollView
+                    scrollEventThrottle={200}
+                    style={styles.scrollView}>
+                    
+                        <TouchableOpacity 
+                            style={styles.btnAddPeople}
+                            onPress={this.onAddCarsPress.bind(this)}>
+                            <View style={styles.btnAddPContent}>
+                                <Image source={require('../img/add-car-btn.png')}/>
+                                <Text style={styles.txtBtn}>+ Add Cars</Text>
+                            </View>
+                        </TouchableOpacity>
+                        
+                        {this.state.cars.map((car, i)=> {
+                            return (
+                                <View key={i} style={styles.rowPersonData}>
+                                    <View style={styles.wrapperCircle}>
+                                        <View style={styles.circle}>
+                                            <Text style={styles.oneLetter}>C</Text>
+                                            <TouchableOpacity 
+                                                style={styles.deleteIconBtn} 
+                                                onPress={this.onHandleDeletePerson.bind(this, car._id, car.ownerId)}>
+                                                    <Image 
+                                                        style={styles.imgDeleteIcon} 
+                                                        source={require('../img/delete-person-icon.png')}/>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                    <View style={styles.wrapperText}>
+                                        <Text style={styles.firstline}>{car.make} {car.model}</Text>
+                                        <Text style={styles.secondline}>{car.owner}, {car.year}</Text>
+                                    </View>
+                                </View>
+                            );
+                        })}
+                </ScrollView>
+                
+                <TouchableOpacity
+                    onPress={() => {}} 
+                    style={buttonNext}>
+                    <View style={btnContent}>
+                        <Text style={btnNextText}>Summary</Text>
+                        <Image source={require('../img/next-icon.png')}/>
+                    </View>
+                </TouchableOpacity>
+                
+            </View>
+      </SideMenu>
+    );
+  }
+}
+
+var styles = StyleSheet.create({
+  scrollView: {
+      flex: 1  
+  },
+  btnAddPeople: {
+        marginTop: 15,
+        marginBottom: 35,
+        paddingLeft: 15
+  },
+  btnAddPContent: {
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        flex: 1,
+        flexDirection: 'row'
+  },
+  txtBtn: {
+        fontFamily: 'Avenir-Medium',
+        color: 'white',
+        fontSize: 23,
+        textAlign: 'center',
+        marginLeft: 20
+  },
+  rowPersonData: {
+        height: 82,
+        width: window.width,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 15,
+  },
+  wrapperCircle: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    circle: {
+        width: 82,
+        height: 82,
+        borderRadius: 82/2,
+        borderColor: 'white',
+        borderWidth: 2,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    oneLetter: {
+        fontFamily: brandFont,
+        color: 'white',
+        opacity: 0.75,
+        fontSize: 40,
+        backgroundColor: 'transparent'
+    },
+    deleteIconBtn: {
+        position: 'absolute',
+        top: 50
+    },
+   wrapperText: {
+        flex: 2,
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+        flexDirection: 'column' 
+    },
+    firstline: {
+        fontFamily: 'Avenir',
+        fontStyle: 'italic',
+        fontSize: 21,
+        color: 'white',
+        fontWeight: '600'
+    },
+    secondline: {
+        fontFamily: 'Avenir',
+        fontSize: 13,
+        color: 'white'
+    }, 
+});

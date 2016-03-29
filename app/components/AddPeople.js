@@ -9,7 +9,6 @@ import {restUrl, brandFont, brandColor, backgroundClr, titleForm, navigationBar,
 import {requestHelper, } from '../utils/dbHelper';
 
 let {
-  AppRegistry,
   StyleSheet,
   PixelRatio,
   NavigatorIOS,
@@ -30,7 +29,6 @@ export default class AddPeople extends React.Component {
         super(props);
         this.state = {
             savingData: false,
-            openSideMenu: false,
             animatingPos: false,
             firstname: '',
             lastname: '',

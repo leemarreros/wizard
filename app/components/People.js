@@ -5,9 +5,21 @@ import Dimensions from 'Dimensions';
 import SideMenu from 'react-native-side-menu';
 
 import AddPeople from  './AddPeople';
+import Cars from  './Cars';
 import NavigationBarCom from  './NavigationBarCom';
 
-import {restUrl, brandFont, brandColor, backgroundClr, titleForm, navigationBar, buttonNavBar} from '../utils/globalVariables';
+import {
+    restUrl, 
+    brandFont, 
+    brandColor, 
+    backgroundClr, 
+    titleForm,
+    buttonNext,
+    btnContent,
+    btnNextText,
+    navigationBar, 
+    buttonNavBar} from '../utils/globalVariables';
+    
 import {requestHelper, } from '../utils/dbHelper';
 
 var window = Dimensions.get('window');
@@ -114,6 +126,23 @@ export default class People extends React.Component {
       ]
     )
   }
+  
+  vehiclesPage() {
+      var route = this.props.route;
+      this.props.navigator.push({
+            component: Cars,
+            houseData: this.props.route.houseData,
+            people: this.state.people,
+            events: route.events,
+            onBurguerMenuPress: route.onBurguerMenuPress.bind(this),
+            navigationBar: (
+                <NavigationBarCom 
+                    title={'VEHICLES'}
+                    navigator={this.props.navigator}
+                    onBackBtnPress={true}/>
+            )
+        });
+  }
 
   render() {
     return (
@@ -130,7 +159,7 @@ export default class People extends React.Component {
                             <TouchableOpacity 
                                 style={styles.btnAddPeople}
                                 onPress={this.onAddPeoplePress.bind(this)}>
-                                <View style={styles.btnContent}>
+                                <View style={styles.btnAddPContent}>
                                     <Image source={require('../img/add-people-btn.png')}/>
                                     <Text style={styles.txtBtn}>+ Add People</Text>
                                 </View>
@@ -161,10 +190,16 @@ export default class People extends React.Component {
                             })}
                             
                         </ScrollView>
-                    
-                    <View>
                         
-                    </View>
+                        <TouchableOpacity
+                            onPress={this.vehiclesPage.bind(this)} 
+                            style={buttonNext}>
+                            <View style={btnContent}>
+                                <Text style={btnNextText}>Add vehicles</Text>
+                                <Image source={require('../img/next-icon.png')}/>
+                            </View>
+                        </TouchableOpacity>
+                        
                 </View>
         </SideMenu>
     );
@@ -180,7 +215,7 @@ var styles = StyleSheet.create({
         marginBottom: 35,
         paddingLeft: 15
     },
-    btnContent: {
+    btnAddPContent: {
         alignItems: 'center',
         justifyContent: 'flex-start',
         flex: 1,

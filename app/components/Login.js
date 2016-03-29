@@ -65,7 +65,6 @@ class Login extends React.Component {
   }
 
   onBurguerMenuPress(bool) {
-    console.log('burguer menu pressed');
     if (!this.opened) {
       this.eventEmitter.emit('burguerBtnEvent', true);
       this.opened = true;
@@ -116,12 +115,12 @@ class Login extends React.Component {
           picture: `https://graph.facebook.com/${userInfo.id}/picture?height=400`,
           fbId: userInfo.id
         };
-        
         fetch(requestHelper(url, body, 'POST'))
         .then((response) => response.json())
         .then((responseData) => {
-            this.setState({houseData: responseData.houseData})
-            this.switchToHouse();
+            this.setState({houseData: responseData.houseData}, function(){
+                this.switchToHouse();
+            })
         })
         .done();
         

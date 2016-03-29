@@ -1,3 +1,6 @@
+import Dimensions from 'Dimensions';
+var window = Dimensions.get('window');
+
 module.exports = {
   restUrl: 'http://localhost:8000',
   brandFont: 'BadScript-Regular',
@@ -22,4 +25,26 @@ module.exports = {
     justifyContent: 'center',
     marginLeft: 12,
   },
+  buttonNext: {
+        position: 'absolute',
+        alignItems: 'center',
+        width: window.width,
+        height: 43,
+        backgroundColor: '#FFEC00',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        bottom: 0
+    },
+    btnContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    btnNextText: {
+        fontFamily: 'Avenir',
+        color: '#4A90E2',
+        textAlign: 'center',
+        fontSize: 17,
+        marginRight: 20
+    },
 };

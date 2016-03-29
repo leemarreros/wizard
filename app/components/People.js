@@ -28,6 +28,8 @@ export default class People extends React.Component {
     super(props);
     this.state = {
         openSideMenu: false,
+        firstTimeRetrieve: true,
+        people: null,
     };
   }
  
@@ -38,12 +40,19 @@ export default class People extends React.Component {
   } 
   
   retrievePeople() {
-    var people = this.props.route.houseData.people;
+    var people;
+    if (!this.state.firstTimeRetrieve) {
+        
+    } else {
+        this.setState({firstTimeRetrieve: false});
+        people = this.props.route.houseData.people;
+        this.setState({people});
+    }
     
   }
   
   componentWillMount() {
-    //   this.retrievePeople();
+    this.retrievePeople();
     this.props.route.events.addListener('burguerBtnEvent',
       (args) => {
         this.setState({openSideMenu: args});
@@ -86,7 +95,23 @@ export default class People extends React.Component {
                                 </View>
                             </TouchableOpacity>
                             
-                            
+                            {this.state.people.map((person, i)=> {
+                                var male = person.gender === 'male' ? (true) : (false);
+                                return (
+                                    <View key={i} style={styles.rowPersonData}>
+                                        <View style={styles.wrapperCircle}>
+                                            <View style={[styles.circle, male ? styles.male : styles.female]}>
+                                                <Text style={styles.oneLetter}>{person.firstname[0]}</Text>
+                                                <TouchableOpacity style={styles.deleteIconBtn}><Image style={styles.imgDeleteIcon} source={require('../img/delete-person-icon.png')}/></TouchableOpacity>
+                                            </View>
+                                        </View>
+                                        <View style={styles.wrapperText}>
+                                            <Text style={styles.firstline}>{person.firstname} {person.lastname}, {person.age}</Text>
+                                            <Text style={styles.secondline}>{person.email}</Text>
+                                        </View>
+                                    </View>
+                                );
+                            })}
                             
                         </ScrollView>
                     
@@ -105,7 +130,7 @@ var styles = StyleSheet.create({
     },
     btnAddPeople: {
         marginTop: 15,
-        marginBottom: 50,
+        marginBottom: 35,
         paddingLeft: 15
     },
     btnContent: {
@@ -120,5 +145,62 @@ var styles = StyleSheet.create({
         fontSize: 23,
         textAlign: 'center',
         marginLeft: 20
-    }
+    },
+    rowPersonData: {
+        height: 82,
+        width: window.width,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 15,
+    },
+    wrapperCircle: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    circle: {
+        width: 82,
+        height: 82,
+        borderRadius: 82/2,
+        borderColor: 'white',
+        borderWidth: 2,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    oneLetter: {
+        fontFamily: brandFont,
+        color: 'white',
+        opacity: 0.75,
+        fontSize: 40,
+        backgroundColor: 'transparent'
+    },
+    deleteIconBtn: {
+        position: 'absolute',
+        top: 50
+    },
+    male: {
+        backgroundColor: '#2D2BE6'
+    },
+    female: {
+        backgroundColor: '#FF4BF4'
+    },
+    wrapperText: {
+        flex: 2,
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+        flexDirection: 'column' 
+    },
+    firstline: {
+        fontFamily: 'Avenir',
+        fontStyle: 'italic',
+        fontSize: 21,
+        color: 'white',
+        fontWeight: '600'
+    },
+    secondline: {
+        fontFamily: 'Avenir',
+        fontSize: 13,
+        color: 'white'
+    },
 });

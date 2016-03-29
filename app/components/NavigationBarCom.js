@@ -42,9 +42,7 @@ export default class TabManager extends React.Component {
                         <TouchableOpacity
                             style={buttonNavBar}
                             onPress={this.handleOnPressBack.bind(this)}>
-                        <Image
-                            source={require('../img/back-icon.png')}
-                            style={[{ width: 20, height: 15}]}/>
+                        <Text style={styles.cancel}>Cancel</Text>
                         </TouchableOpacity>
                     }/>
             );
@@ -68,3 +66,10 @@ export default class TabManager extends React.Component {
     }
 }
 
+var styles = StyleSheet.create({
+    cancel: {
+        color: 'white',
+        textAlign: 'center',
+        fontFamily: 'Avenir-Heavy'
+    }
+});

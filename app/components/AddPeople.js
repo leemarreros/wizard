@@ -41,21 +41,6 @@ export default class AddPeople extends React.Component {
         };
     }
     
-    onChangeSideMenu(isOpen) {
-        console.log('onChangeSideMenu', isOpen);
-        if (isOpen === false) {
-            this.props.route.onBurguerMenuPress(false);
-        }
-    } 
-
-    componentWillMount() {
-        this.props.route.events.addListener('burguerBtnEvent2',
-        (args) => {
-            console.log('PEOPLEJS brguer 2', args);
-            this.setState({openSideMenu: args});
-        });
-    }
-    
     handleGenderSelection(option) {
         if (option === 'male') {
             this.setState({
@@ -84,7 +69,7 @@ export default class AddPeople extends React.Component {
         !!this.state.age ? body.age = this.state.age : null;
         this.state.male ? body.gender = 'male' : null;
         this.state.female ? body.gender = 'female' : null;
-        console.log('body', body);
+        console.log('Addpeople body', body);
         fetch(requestHelper(url, body, 'POST'))
         .then((response) => response.json())
         .then((responseData) => {
@@ -97,112 +82,106 @@ export default class AddPeople extends React.Component {
     render() {
         console.log('openSideMenu', this.state.openSideMenu);
         return (
-            <SideMenu
-                openMenuOffset={window.width/2}
-                disableGestures={true}
-                onChange={this.onChangeSideMenu.bind(this)}
-                isOpen={this.state.openSideMenu}>
-                    <View style={{flex: 1, backgroundColor: backgroundClr}}>
-                        
-                        <View style={styles.wrapTitleF}>
-                            <Text style={[titleForm, {fontSize: 54}]}>Who's this person?</Text>
-                        </View>
-                        
-                        <View style={styles.titleFieldBar}>
-                            <View style={{flex: 1}}>
-                                <Text style={styles.fieldName}>PERSONAL INFORMATION</Text>
-                            </View>
-                            <View style={{flex: 1, flexDirection: 'row'}}>
-                                <ActivityIndicatorIOS
-                                    animating={this.state.animatingPos}
-                                    style={{height: 20}}
-                                    size="small"/>
-                                <TouchableOpacity
-                                    onPress={()=>{}}
-                                    style={{flex: 1}}>
-                                    <Text
-                                    style={[styles.fieldName, {textAlign: 'right', marginRight: 15, fontWeight: 'bold'}]}>
-                                        GET FROM FACEBOOK
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                        
-                        <View style={styles.fieldContainer}>
-                            <View style={{flex: 1, borderLeftColor: '#D1D1D1', borderLeftWidth: 0.5}}>
-                            <TextInput
-                                value={this.state.firstname}
-                                style={styles.inputBox}
-                                placeholderTextColor={'#DADADA'}
-                                placeholder="First Name*"
-                                onChangeText={(firstname) => this.setState({firstname})}/>
-                            </View>
-                            <View style={{flex: 1}}>
-                            <TextInput
-                                value={this.state.lastname}
-                                style={styles.inputBox}
-                                placeholderTextColor={'#DADADA'}
-                                placeholder="Last Name"
-                                onChangeText={(lastname) => this.setState({lastname})}/>
-                            </View>
-                        </View>
-                        
-                        <View style={styles.fieldContainer}>
-                            <View style={{flex: 1, borderBottomColor: '#D1D1D1', borderBottomWidth: 0.5}}>
-                            <TextInput
-                                value={this.state.email}
-                                style={styles.inputBox}
-                                placeholder="E-mail"
-                                placeholderTextColor={'#DADADA'}
-                                onChangeText={(email) => this.setState({email})}/>
-                            </View>
-                        </View>
-                        
-                        <View style={styles.fieldContainer}>
-                            <View style={{flex: 1, borderBottomColor: '#D1D1D1', borderBottomWidth: 0.5}}>
-                            <TextInput
-                                value={this.state.age}
-                                style={styles.inputBox}
-                                placeholder="Age"
-                                keyboardType={'numeric'}
-                                placeholderTextColor={'#DADADA'}
-                                onChangeText={(age) => this.setState({age})}/>
-                            </View>
-                        </View>
-                        
-                        <View style={styles.titleFieldBar}>
-                            <View style={{flex: 1}}>
-                                <Text style={styles.fieldName}>GENDER</Text>
-                            </View>
-                        </View>
-                        
-                        <View style={styles.wrapperGender}>
-                            <View style={styles.wrapperContent}>
-                                <TouchableOpacity
-                                    style={[styles.makeOpt, this.state.male ? styles.maleSelected : null]}
-                                    onPress={this.handleGenderSelection.bind(this, 'male')}>
-                                </TouchableOpacity>
-                                <Text style={styles.genderTxt}>MALE</Text>
-                            </View>
-                            <View style={styles.wrapperContent}>
-                                <TouchableOpacity
-                                    style={[styles.makeOpt, this.state.female ? styles.femaleSelected : null]}
-                                    onPress={this.handleGenderSelection.bind(this, 'female')}>
-                                </TouchableOpacity>
-                                <Text style={styles.genderTxt}>FEMALE</Text>
-                            </View>
-                        </View>
-                        
-                        <TouchableOpacity
-                            onPress={this.handleSavePress.bind(this)} 
-                            style={styles.buttonSave}>
-                            <View style={styles.btnContent}>
-                                <Text style={styles.btnSaveText}>SAVE</Text>
-                            </View>
-                        </TouchableOpacity>
-                        
+            <View style={{flex: 1, backgroundColor: backgroundClr}}>
+                
+                <View style={styles.wrapTitleF}>
+                    <Text style={[titleForm, {fontSize: 54}]}>Who's this person?</Text>
+                </View>
+                
+                <View style={styles.titleFieldBar}>
+                    <View style={{flex: 1}}>
+                        <Text style={styles.fieldName}>PERSONAL INFORMATION</Text>
                     </View>
-            </SideMenu>
+                    <View style={{flex: 1, flexDirection: 'row'}}>
+                        <ActivityIndicatorIOS
+                            animating={this.state.animatingPos}
+                            style={{height: 20}}
+                            size="small"/>
+                        <TouchableOpacity
+                            onPress={()=>{}}
+                            style={{flex: 1}}>
+                            <Text
+                            style={[styles.fieldName, {textAlign: 'right', marginRight: 15, fontWeight: 'bold'}]}>
+                                GET FROM FACEBOOK
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                
+                <View style={styles.fieldContainer}>
+                    <View style={{flex: 1, borderLeftColor: '#D1D1D1', borderLeftWidth: 0.5}}>
+                    <TextInput
+                        value={this.state.firstname}
+                        style={styles.inputBox}
+                        placeholderTextColor={'#DADADA'}
+                        placeholder="First Name*"
+                        onChangeText={(firstname) => this.setState({firstname})}/>
+                    </View>
+                    <View style={{flex: 1}}>
+                    <TextInput
+                        value={this.state.lastname}
+                        style={styles.inputBox}
+                        placeholderTextColor={'#DADADA'}
+                        placeholder="Last Name"
+                        onChangeText={(lastname) => this.setState({lastname})}/>
+                    </View>
+                </View>
+                
+                <View style={styles.fieldContainer}>
+                    <View style={{flex: 1, borderBottomColor: '#D1D1D1', borderBottomWidth: 0.5}}>
+                    <TextInput
+                        value={this.state.email}
+                        style={styles.inputBox}
+                        placeholder="E-mail"
+                        placeholderTextColor={'#DADADA'}
+                        onChangeText={(email) => this.setState({email})}/>
+                    </View>
+                </View>
+                
+                <View style={styles.fieldContainer}>
+                    <View style={{flex: 1, borderBottomColor: '#D1D1D1', borderBottomWidth: 0.5}}>
+                    <TextInput
+                        value={this.state.age}
+                        style={styles.inputBox}
+                        placeholder="Age"
+                        keyboardType={'numeric'}
+                        placeholderTextColor={'#DADADA'}
+                        onChangeText={(age) => this.setState({age})}/>
+                    </View>
+                </View>
+                
+                <View style={styles.titleFieldBar}>
+                    <View style={{flex: 1}}>
+                        <Text style={styles.fieldName}>GENDER</Text>
+                    </View>
+                </View>
+                
+                <View style={styles.wrapperGender}>
+                    <View style={styles.wrapperContent}>
+                        <TouchableOpacity
+                            style={[styles.makeOpt, this.state.male ? styles.maleSelected : null]}
+                            onPress={this.handleGenderSelection.bind(this, 'male')}>
+                        </TouchableOpacity>
+                        <Text style={styles.genderTxt}>MALE</Text>
+                    </View>
+                    <View style={styles.wrapperContent}>
+                        <TouchableOpacity
+                            style={[styles.makeOpt, this.state.female ? styles.femaleSelected : null]}
+                            onPress={this.handleGenderSelection.bind(this, 'female')}>
+                        </TouchableOpacity>
+                        <Text style={styles.genderTxt}>FEMALE</Text>
+                    </View>
+                </View>
+                
+                <TouchableOpacity
+                    onPress={this.handleSavePress.bind(this)} 
+                    style={styles.buttonSave}>
+                    <View style={styles.btnContent}>
+                        <Text style={styles.btnSaveText}>SAVE</Text>
+                    </View>
+                </TouchableOpacity>
+                
+            </View>
         );
     }
 }

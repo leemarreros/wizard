@@ -123,12 +123,17 @@ export default class People extends React.Component {
     )
   }
   
+  updateCarsDatainPeople(newCarsData) {
+      this.props.route.houseData.cars = newCarsData;
+  }
+  
   vehiclesPage() {
       var route = this.props.route;
       this.props.navigator.push({
             component: Cars,
             houseData: this.props.route.houseData,
             people: this.state.people,
+            updateCarsDatainPeople: this.updateCarsDatainPeople.bind(this),
             navigationBar: (
                 <NavigationBarCom 
                     title={'VEHICLES'}

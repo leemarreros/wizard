@@ -97,6 +97,7 @@ export default class Cars extends React.Component {
         .then((response) => response.json())
         .then((responseData) => {
             cars = responseData.carsData.cars;
+            this.props.route.updateCarsDatainPeople(cars);
             this.newCarsData = cars;
             this.setState({cars, updateCarsData: false});
         })
@@ -110,7 +111,7 @@ export default class Cars extends React.Component {
     
   }
   
-  onHandleDeletePerson(carId, ownerId) {
+  onHandleDeleteCar(carId, ownerId) {
       var cars;
       this.setState({updateCarsData: true})      
       function deleteCar() {
@@ -125,6 +126,7 @@ export default class Cars extends React.Component {
             .then((response) => response.json())
             .then((responseData) => {
                 cars = responseData.carsData.cars;
+                this.props.route.updateCarsDatainPeople(cars);                
                 this.setState({cars, updateCarsData: false});
             })
             .done();
@@ -191,7 +193,7 @@ export default class Cars extends React.Component {
                                         <ImageSwitcher i={i} style={styles.imageCar}/>
                                         <TouchableOpacity 
                                             style={styles.deleteIconBtn} 
-                                            onPress={this.onHandleDeletePerson.bind(this, car._id, car.ownerId)}>
+                                            onPress={this.onHandleDeleteCar.bind(this, car._id, car.ownerId)}>
                                                 <Image 
                                                     style={styles.imgDeleteIcon} 
                                                     source={require('../img/delete-person-icon.png')}/>

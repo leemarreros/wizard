@@ -54,7 +54,8 @@ export default class Summary extends React.Component {
   }
   
   housePage() {
-   console.log(this.props.navigator.getCurrentRoutes());   
+    var stack = this.props.navigator.getCurrentRoutes();
+    this.props.navigator.jumpTo(stack[1]);   
   }
 
   render() {

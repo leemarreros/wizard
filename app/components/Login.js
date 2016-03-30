@@ -7,6 +7,7 @@ import FBSDKCore from 'react-native-fbsdkcore';
 import FBSDKLogin from 'react-native-fbsdklogin';
 
 import House from  './House';
+import Spinner from  './Spinner';
 import NavigationBarCom from  './NavigationBarCom';
 
 import {restUrl, brandFont, brandColor, backgroundClr, navigationBar, buttonNavBar} from '../utils/globalVariables';
@@ -35,6 +36,7 @@ let {
   TextInput,
   TouchableHighlight,
   Image,
+  ActivityIndicatorIOS,
   TouchableOpacity,
   Textinput
 } = React;
@@ -45,6 +47,7 @@ class Login extends React.Component {
     super(props);
     this.state = {
       houseData: null,
+      savingData: false,
     };
   }
 
@@ -107,6 +110,7 @@ class Login extends React.Component {
         fetch(requestHelper(url, body, 'POST'))
         .then((response) => response.json())
         .then((responseData) => {
+            this.setState({savingData: false});
             this.setState({houseData: responseData.houseData}, function(){
                 this.switchToHouse();
             })
@@ -120,12 +124,15 @@ class Login extends React.Component {
   }
 
   onFbSignInPress() {
+     this.setState({savingData: true});
      FBSDKLoginManager.logInWithReadPermissions([], (error, result) => {
       if (error) {
         alert('Error logging in.');
+        this.setState({savingData: false});
       } else {
         if (result.isCancelled) {
           alert('Login cancelled.');
+          this.setState({savingData: false});
         } else {
           this.getAccesToken();
         }
@@ -145,34 +152,37 @@ class Login extends React.Component {
   render() {
 
     return (
-      <Image
-        source={require('../img/bckFront-wizard.png')}   
-        style={styles.background}>
-        
-        <View style={styles.loginScreen}>
-        
-            <View style={styles.brandWrap}>
-                <Text style={styles.titleApp}>WIZARD!</Text>
-                <Text style={styles.description}>keep the count of what matters at home</Text>
-            </View>
-
-            <TouchableHighlight
-                onPress={this.onFbSignInPress.bind(this)}
-                style={styles.loginButton}>
-                <View style={styles.wrapperInsideBtn}>
-                    <Image source={require('../img/fb-icon.png')}/>
-                    <Text style={styles.textButton}>LOGIN WITH FACEBOOK</Text>
+      <View style={{flex: 1}}> 
+        <Image
+            source={require('../img/bckFront-wizard.png')}   
+            style={styles.background}>
+            
+            <View style={styles.loginScreen}>
+            
+                <View style={styles.brandWrap}>
+                    <Text style={styles.titleApp}>WIZARD!</Text>
+                    <Text style={styles.description}>keep the count of what matters at home</Text>
                 </View>
-            </TouchableHighlight>
-                
-            <View style={styles.wrapperTerms}>
-                <Text style={styles.terms}>
-                    By clicking Sign Up you are agreeing to the <Text style={{color: brandColor}}>Terms of use</Text> and <Text style={{color: brandColor}}>Privacy Policy</Text>.
-                </Text>
+
+                <TouchableHighlight
+                    onPress={this.onFbSignInPress.bind(this)}
+                    style={styles.loginButton}>
+                    <View style={styles.wrapperInsideBtn}>
+                        <Image source={require('../img/fb-icon.png')}/>
+                        <Text style={styles.textButton}>LOGIN WITH FACEBOOK</Text>
+                    </View>
+                </TouchableHighlight>
+                    
+                <View style={styles.wrapperTerms}>
+                    <Text style={styles.terms}>
+                        By clicking Sign Up you are agreeing to the <Text style={{color: brandColor}}>Terms of use</Text> and <Text style={{color: brandColor}}>Privacy Policy</Text>.
+                    </Text>
+                </View>
             </View>
-        </View>
-        
-      </Image>
+            
+        </Image>
+        {this.state.savingData ? (Spinner) : null}
+      </View>
     );
   }
 }

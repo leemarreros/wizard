@@ -30,24 +30,26 @@ export default class House extends React.Component {
 
   constructor(props) {
     super(props);
+    var houseData = this.props.route.houseData;
     this.state = {
       openSideMenu: false,
       animatingPos: false,
       savingData: false,
-      address: this.props.route.houseData.address || '',
-      zipcode: this.props.route.houseData.zipcode || '',
-      city: this.props.route.houseData.city || '',
-      state: this.props.route.houseData.state || '',
-      bedrooms: this.props.route.houseData.bedrooms || 1,
+      address: houseData && houseData.address || '',
+      zipcode: houseData && houseData.zipcode || '',
+      city: houseData && houseData.city || '',
+      state: houseData && houseData.state || '',
+      bedrooms: houseData && houseData.bedrooms || 1,
     };
   }
   
   componentWillMount() {
-    this.addressIn = this.props.route.houseData.address || '';
-    this.zipcodeIn = this.props.route.houseData.zipcode || '';
-    this.cityIn = this.props.route.houseData.city || '';
-    this.stateIn = this.props.route.houseData.state || '';
-    this.bedroomsIn = this.props.route.houseData.bedrooms || 1;
+    var houseData = this.props.route.houseData;
+    this.addressIn = houseData && houseData.address || '';
+    this.zipcodeIn = houseData && houseData.zipcode || '';
+    this.cityIn = houseData && houseData.city || '';
+    this.stateIn = houseData && houseData.state || '';
+    this.bedroomsIn = houseData && houseData.bedrooms || 1;
   }
 
 

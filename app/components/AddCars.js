@@ -153,7 +153,6 @@ export default class AddCars extends React.Component {
                 
                 <View style={styles.wrapperOwners}>
                     {this.state.people.map((person, i) => {
-                        console.log('inside map', this.handleActiveButtons.bind(this, i), i)
                         return (
                             <View key={i} style={styles.container}>
                                 <TouchableOpacity 

@@ -41,7 +41,7 @@ export default class People extends React.Component {
     super(props);
     this.state = {
         openSideMenu: false,
-        people: null,
+        people: this.newPeopleData,
         updatePeopleData: false,
     };
   }
@@ -61,12 +61,15 @@ export default class People extends React.Component {
         .then((response) => response.json())
         .then((responseData) => {
             people = responseData.peopleData.people;
+            this.newPeopleData = people;
             this.setState({people, updatePeopleData: false});
         })
         .done();
     } else {
-        people = this.props.route.houseData.people;
-        this.setState({people, updatePeopleData: false});
+        if (!this.state.people) {
+            people = this.props.route.houseData.people;
+            this.setState({people, updatePeopleData: false});
+        }
     }
     
   }
@@ -77,6 +80,7 @@ export default class People extends React.Component {
   }
   
   componentWillMount() {
+      console.log('willmount');
     this.firstTimeRetrieve = true;
     this.retrievePeopleData();
     this.props.route.events.addListener('burguerBtnEvent',

@@ -40,7 +40,7 @@ export default class Cars extends React.Component {
     super(props);
     this.state = {
         openSideMenu: false,
-        cars: null,
+        cars: this.newCarsData,
         updateCarsData: false,
     };
   }
@@ -74,12 +74,15 @@ export default class Cars extends React.Component {
         .then((response) => response.json())
         .then((responseData) => {
             cars = responseData.carsData.cars;
+            this.newCarsData = cars;
             this.setState({cars, updateCarsData: false});
         })
         .done();
     } else {
-        cars = this.props.route.houseData.cars;
-        this.setState({cars, updateCarsData: false});
+        if (!this.state.cars) {
+            cars = this.props.route.houseData.cars;
+            this.setState({cars, updateCarsData: false});
+        }
     }
     
   }
@@ -130,60 +133,54 @@ export default class Cars extends React.Component {
 
   render() {
     return (
-      <SideMenu
-            openMenuOffset={window.width/2}
-            disableGestures={true}
-            onChange={this.onChangeSideMenu.bind(this)}
-            isOpen={this.state.openSideMenu}>
-            <View style={{flex: 1, backgroundColor: backgroundClr}}>
-                <ScrollView
-                    scrollEventThrottle={200}
-                    style={styles.scrollView}>
+        <View style={{flex: 1, backgroundColor: backgroundClr}}>
+            <ScrollView
+                scrollEventThrottle={200}
+                style={styles.scrollView}>
+                
+                    <TouchableOpacity 
+                        style={styles.btnAddPeople}
+                        onPress={this.onAddCarsPress.bind(this)}>
+                        <View style={styles.btnAddPContent}>
+                            <Image source={require('../img/add-car-btn.png')}/>
+                            <Text style={styles.txtBtn}>+ Add Cars</Text>
+                        </View>
+                    </TouchableOpacity>
                     
-                        <TouchableOpacity 
-                            style={styles.btnAddPeople}
-                            onPress={this.onAddCarsPress.bind(this)}>
-                            <View style={styles.btnAddPContent}>
-                                <Image source={require('../img/add-car-btn.png')}/>
-                                <Text style={styles.txtBtn}>+ Add Cars</Text>
-                            </View>
-                        </TouchableOpacity>
-                        
-                        {this.state.cars.map((car, i)=> {
-                            return (
-                                <View key={i} style={styles.rowPersonData}>
-                                    <View style={styles.wrapperCircle}>
-                                        <View style={styles.circle}>
-                                            <Text style={styles.oneLetter}>C</Text>
-                                            <TouchableOpacity 
-                                                style={styles.deleteIconBtn} 
-                                                onPress={this.onHandleDeletePerson.bind(this, car._id, car.ownerId)}>
-                                                    <Image 
-                                                        style={styles.imgDeleteIcon} 
-                                                        source={require('../img/delete-person-icon.png')}/>
-                                            </TouchableOpacity>
-                                        </View>
-                                    </View>
-                                    <View style={styles.wrapperText}>
-                                        <Text style={styles.firstline}>{car.make} {car.model}</Text>
-                                        <Text style={styles.secondline}>{car.owner}, {car.year}</Text>
+                    {this.state.cars.map((car, i)=> {
+                        return (
+                            <View key={i} style={styles.rowPersonData}>
+                                <View style={styles.wrapperCircle}>
+                                    <View style={styles.circle}>
+                                        <Text style={styles.oneLetter}>C</Text>
+                                        <TouchableOpacity 
+                                            style={styles.deleteIconBtn} 
+                                            onPress={this.onHandleDeletePerson.bind(this, car._id, car.ownerId)}>
+                                                <Image 
+                                                    style={styles.imgDeleteIcon} 
+                                                    source={require('../img/delete-person-icon.png')}/>
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
-                            );
-                        })}
-                </ScrollView>
-                
-                <TouchableOpacity
-                    onPress={() => {}} 
-                    style={buttonNext}>
-                    <View style={btnContent}>
-                        <Text style={btnNextText}>Summary</Text>
-                        <Image source={require('../img/next-icon.png')}/>
-                    </View>
-                </TouchableOpacity>
-                
-            </View>
-      </SideMenu>
+                                <View style={styles.wrapperText}>
+                                    <Text style={styles.firstline}>{car.make} {car.model}</Text>
+                                    <Text style={styles.secondline}>{car.owner}, {car.year}</Text>
+                                </View>
+                            </View>
+                        );
+                    })}
+            </ScrollView>
+            
+            <TouchableOpacity
+                onPress={() => {}} 
+                style={buttonNext}>
+                <View style={btnContent}>
+                    <Text style={btnNextText}>Summary</Text>
+                    <Image source={require('../img/next-icon.png')}/>
+                </View>
+            </TouchableOpacity>
+            
+        </View>
     );
   }
 }

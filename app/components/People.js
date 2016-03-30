@@ -2,7 +2,6 @@
 
 import React from 'react-native';
 import Dimensions from 'Dimensions';
-import SideMenu from 'react-native-side-menu';
 
 import AddPeople from  './AddPeople';
 import Cars from  './Cars';
@@ -40,7 +39,6 @@ export default class People extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        openSideMenu: false,
         people: this.newPeopleData,
         updatePeopleData: false,
     };
@@ -82,24 +80,17 @@ export default class People extends React.Component {
   componentWillMount() {
     this.firstTimeRetrieve = true;
     this.retrievePeopleData();
-    this.props.route.events.addListener('burguerBtnEvent',
-      (args) => {
-        this.setState({openSideMenu: args});
-      });
   }
   
   onAddPeoplePress() {
       var route = this.props.route;
       this.props.navigator.push({
             component: AddPeople,
-            events: route.events,
             updatePeopleData: this.updatePeopleData.bind(this),
-            onBurguerMenuPress: route.onBurguerMenuPress.bind(this),
             navigationBar: (
-                <NavigationBarCom 
-                    title={'PEOPLE'}
-                    navigator={this.props.navigator}
-                    onBackBtnPress={true}/>
+                <NavigationBarCom
+                    navigator={this.props.navigator} 
+                    title={'PEOPLE'}/>
             )
         });
   }
@@ -136,8 +127,6 @@ export default class People extends React.Component {
             component: Cars,
             houseData: this.props.route.houseData,
             people: this.state.people,
-            events: route.events,
-            onBurguerMenuPress: route.onBurguerMenuPress.bind(this),
             navigationBar: (
                 <NavigationBarCom 
                     title={'VEHICLES'}
@@ -149,69 +138,64 @@ export default class People extends React.Component {
 
   render() {
     return (
-        <SideMenu
-            openMenuOffset={window.width/2}
-            disableGestures={true}
-            onChange={this.onChangeSideMenu.bind(this)}
-            isOpen={this.state.openSideMenu}>
-                <View style={{flex: 1, backgroundColor: backgroundClr}}>
-                    <ScrollView
-                        scrollEventThrottle={200}
-                        style={styles.scrollView}>
-                        
-                            <TouchableOpacity 
-                                style={styles.btnAddPeople}
-                                onPress={this.onAddPeoplePress.bind(this)}>
-                                <View style={styles.btnAddPContent}>
-                                    <Image source={require('../img/add-people-btn.png')}/>
-                                    <Text style={styles.txtBtn}>+ Add People</Text>
-                                </View>
-                            </TouchableOpacity>
-                            
-                            {this.state.people.map((person, i)=> {
-                                var male = person.gender === 'male' ? (true) : (false);
-                                return (
-                                    <View key={i} style={styles.rowPersonData}>
-                                        <View style={styles.wrapperCircle}>
-                                            <View style={[styles.circle, male ? styles.male : styles.female]}>
-                                                <Text style={styles.oneLetter}>{person.firstname[0]}</Text>
-                                                <TouchableOpacity 
-                                                    style={styles.deleteIconBtn} 
-                                                    onPress={this.onHandleDeletePerson.bind(this, person._id)}>
-                                                        <Image 
-                                                            style={styles.imgDeleteIcon} 
-                                                            source={require('../img/delete-person-icon.png')}/>
-                                                </TouchableOpacity>
-                                            </View>
-                                        </View>
-                                        <View style={styles.wrapperText}>
-                                            <Text style={styles.firstline}>{person.firstname} {person.lastname}, {person.age}</Text>
-                                            <Text style={styles.secondline}>{person.email}</Text>
-                                        </View>
+        <View style={{flex: 1, backgroundColor: backgroundClr}}>
+            <ScrollView
+                scrollEventThrottle={200}
+                style={styles.scrollView}>
+                
+                    <TouchableOpacity 
+                        style={styles.btnAddPeople}
+                        onPress={this.onAddPeoplePress.bind(this)}>
+                        <View style={styles.btnAddPContent}>
+                            <Image source={require('../img/add-people-btn.png')}/>
+                            <Text style={styles.txtBtn}>+ Add People</Text>
+                        </View>
+                    </TouchableOpacity>
+                    
+                    {this.state.people.map((person, i)=> {
+                        var male = person.gender === 'male' ? (true) : (false);
+                        return (
+                            <View key={i} style={styles.rowPersonData}>
+                                <View style={styles.wrapperCircle}>
+                                    <View style={[styles.circle, male ? styles.male : styles.female]}>
+                                        <Text style={styles.oneLetter}>{person.firstname[0]}</Text>
+                                        <TouchableOpacity 
+                                            style={styles.deleteIconBtn} 
+                                            onPress={this.onHandleDeletePerson.bind(this, person._id)}>
+                                                <Image 
+                                                    style={styles.imgDeleteIcon} 
+                                                    source={require('../img/delete-person-icon.png')}/>
+                                        </TouchableOpacity>
                                     </View>
-                                );
-                            })}
-                            
-                        </ScrollView>
-                        
-                        <TouchableOpacity
-                            onPress={this.vehiclesPage.bind(this)} 
-                            style={buttonNext}>
-                            <View style={btnContent}>
-                                <Text style={btnNextText}>Add vehicles</Text>
-                                <Image source={require('../img/next-icon.png')}/>
+                                </View>
+                                <View style={styles.wrapperText}>
+                                    <Text style={styles.firstline}>{person.firstname} {person.lastname}, {person.age}</Text>
+                                    <Text style={styles.secondline}>{person.email}</Text>
+                                </View>
                             </View>
-                        </TouchableOpacity>
-                        
-                </View>
-        </SideMenu>
+                        );
+                    })}
+                    
+                </ScrollView>
+                
+                <TouchableOpacity
+                    onPress={this.vehiclesPage.bind(this)} 
+                    style={buttonNext}>
+                    <View style={btnContent}>
+                        <Text style={btnNextText}>Add vehicles</Text>
+                        <Image source={require('../img/next-icon.png')}/>
+                    </View>
+                </TouchableOpacity>
+                
+        </View>
     );
   }
 }
 
 var styles = StyleSheet.create({
     scrollView: {
-      flex: 1  
+      flex: 1,
+      marginBottom: 55
     },
     btnAddPeople: {
         marginTop: 15,

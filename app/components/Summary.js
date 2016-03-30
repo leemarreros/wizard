@@ -60,7 +60,7 @@ export default class Summary extends React.Component {
 
   render() {
     return (
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, backgroundColor: '#4A90E2'}}>
         <ScrollView
             scrollEventThrottle={200}
             style={styles.scrollView}>
@@ -173,7 +173,8 @@ export default class Summary extends React.Component {
 
 var styles = StyleSheet.create({
     scrollView: {
-        flex: 1
+        flex: 1,
+        marginBottom: 55
     },
     wrapperContent: {
       flex: 1, 

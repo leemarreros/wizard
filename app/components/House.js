@@ -3,12 +3,10 @@
 import React from 'react-native';
 import Dimensions from 'Dimensions';
 import NavigationBar from 'react-native-navbar';
-import SideMenu from 'react-native-side-menu';
 import Geocoder from 'react-native-geocoder';
 
 import People from  './People';
 import NavigationBarCom from  './NavigationBarCom';
-// import SideMenuLeft from '../utilComponents/SideMenuLeft'
 import {restUrl, brandFont, brandColor, backgroundClr, titleForm, navigationBar, buttonNavBar} from '../utils/globalVariables';
 import {requestHelper, } from '../utils/dbHelper';
 
@@ -49,19 +47,8 @@ export default class House extends React.Component {
     this.cityIn = this.props.route.houseData.city || '';
     this.stateIn = this.props.route.houseData.state || '';
     this.bedroomsIn = this.props.route.houseData.bedrooms || 1;
-    
-    // this.props.route.events.addListener('burguerBtnEvent',
-    //   (args) => {
-    //     this.setState({openSideMenu: args});
-    //   });
   }
 
-
-  onChangeSideMenu(isOpen) {
-    if (isOpen === false) {
-        this.props.route.onBurguerMenuPress(false);
-    }
-  }
 
   onPressCurrentPosition(count) {
     this.setState({animatingPos: true});
@@ -102,19 +89,18 @@ export default class House extends React.Component {
           this.zipcodeIn == this.state.zipcode &&
           this.cityIn == this.state.city &&
           this.stateIn == this.state.state &&
-          this.bedroomsIn == this.state.bedrooms) return true;
-      return false;
+          this.bedroomsIn == this.state.bedrooms) return false;
+      return true;
   }
   
   switchToPeople() {
     this.props.navigator.push({
       component: People,
-      events: this.props.route.events,
       houseData: this.props.route.houseData,
-      onBurguerMenuPress: this.props.route.onBurguerMenuPress.bind(this),
       navigationBar: (
         <NavigationBarCom
-          onBurguerMenuPress={this.props.route.onBurguerMenuPress.bind(this)}
+          navigator={this.props.navigator}
+          onBackBtnPress={true}
           title={'PEOPLE'}/>
       )
     });
@@ -132,6 +118,7 @@ export default class House extends React.Component {
     body.bedrooms = this.state.bedrooms;
     
     if (this.newHouseData()) {
+        console.log('newData')
         fetch(requestHelper(url, body, 'POST'))
         .then((response) => response.json())
         .then((responseData) => {
@@ -140,18 +127,14 @@ export default class House extends React.Component {
         })
         .done();
     } else {
-            this.switchToPeople();
-            this.setState({savingData: false});
+        console.log('no newData')        
+        this.switchToPeople();
+        this.setState({savingData: false});
     }
   }
   
   render() {
     return (
-      <SideMenu
-        openMenuOffset={window.width/2}
-        disableGestures={true}
-        onChange={this.onChangeSideMenu.bind(this)}
-        isOpen={this.state.openSideMenu}>
         <View style={{flex: 1, backgroundColor: backgroundClr}}>
             <View style={styles.wrapTitleF}>
                 <Text style={titleForm}>My Household</Text>
@@ -257,7 +240,6 @@ export default class House extends React.Component {
                 </View>
             </TouchableOpacity>
         </View>
-      </SideMenu>
     );
   }
 }

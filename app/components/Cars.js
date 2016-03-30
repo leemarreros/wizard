@@ -3,7 +3,6 @@
 import React from 'react-native';
 import Dimensions from 'Dimensions';
 import NavigationBar from 'react-native-navbar';
-import SideMenu from 'react-native-side-menu';
 import NavigationBarCom from  './NavigationBarCom';
 
 import AddCars from  './AddCars';
@@ -40,25 +39,14 @@ export default class Cars extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        openSideMenu: false,
         cars: this.newCarsData,
         updateCarsData: false,
     };
   }
   
-  onChangeSideMenu(isOpen) {
-    if (isOpen === false) {
-      this.props.route.onBurguerMenuPress(false);
-    }
-  }
-  
   componentWillMount() {
     this.firstTimeRetrieve = true;
     this.retrieveCarsData();
-    this.props.route.events.addListener('burguerBtnEvent',
-      (args) => {
-        this.setState({openSideMenu: args});
-      });
   }
   
   updateCarsData() {
@@ -119,14 +107,12 @@ export default class Cars extends React.Component {
       var route = this.props.route;
       this.props.navigator.push({
             component: AddCars,
-            events: route.events,
             people: route.people,
             updateCarsData: this.updateCarsData.bind(this),
             navigationBar: (
                 <NavigationBarCom 
                     title={'VEHICLES'}
-                    navigator={this.props.navigator}
-                    onBackBtnPress={true}/>
+                    navigator={this.props.navigator}/>
             )
         });
   }
@@ -203,7 +189,8 @@ export default class Cars extends React.Component {
 
 var styles = StyleSheet.create({
   scrollView: {
-      flex: 1  
+      flex: 1,
+      marginBottom: 55
   },
   btnAddPeople: {
         marginTop: 15,

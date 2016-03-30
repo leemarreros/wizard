@@ -12,7 +12,6 @@ import NavigationBarCom from  './NavigationBarCom';
 import {restUrl, brandFont, brandColor, backgroundClr, navigationBar, buttonNavBar} from '../utils/globalVariables';
 import {requestHelper, } from '../utils/dbHelper';
 
-var EventEmitter = require('EventEmitter');
 var window = Dimensions.get('window');
 
 var {
@@ -45,14 +44,12 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      openSideMenu: false,
       houseData: null,
     };
   }
 
   componentWillMount() {
     StatusBar.setBarStyle('light-content');
-    this.eventEmitter = new EventEmitter();
     this.opened = false;
   }
   
@@ -64,17 +61,9 @@ class Login extends React.Component {
     )
   }
 
-  onBurguerMenuPress(bool) {
-    if (!this.opened) {
-      this.eventEmitter.emit('burguerBtnEvent', true);
-      this.opened = true;
-    } else {
-      this.eventEmitter.emit('burguerBtnEvent', false);
-    }
-    if (!bool) {
-      this.opened = false;
-      this.eventEmitter.emit('burguerBtnEvent', false);
-    }
+  onLogOutPress() {
+    FBSDKLoginManager.logOut();
+    this.props.navigator.popToTop();
   }
 
   switchToHouse() {
@@ -82,12 +71,12 @@ class Login extends React.Component {
       component: House,
       events: this.eventEmitter,
       houseData: this.state.houseData,
-      onBurguerMenuPress: this.onBurguerMenuPress.bind(this),
       onLogOutPress: this.onLogOutPress.bind(this),
       navigationBar: (
-        <NavigationBarCom 
-            title={'HOUSE'}
-            onBurguerMenuPress={this.onBurguerMenuPress.bind(this)}/>
+        <NavigationBarCom
+            onLogOutPress={this.onLogOutPress.bind(this)}
+            onLogout={true} 
+            title={'HOUSE'}/>
       )
     });
   }

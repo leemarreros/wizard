@@ -26,11 +26,24 @@ export default class TabManager extends React.Component {
         super(props);
     }
     
-    handleOnPressBack() {
-        this.props.navigator.pop();
-    }
-    
     render() {
+        if (this.props.onLogout) {
+            return (
+                <NavigationBar
+                    title={{title: this.props.title, tintColor: 'white'}}
+                    style={navigationBar}
+                    tintColor='#2981E8'
+                    statusBar={{style: 'light-content', hidden: false}}
+                    leftButton={
+                        <TouchableOpacity
+                            style={buttonNavBar}
+                            onPress={()=> {this.props.onLogOutPress()}}>
+                        <Text style={styles.cancel}>Logout</Text>
+                        </TouchableOpacity>
+                    }/>
+            );
+        }
+        
         if (this.props.onBackBtnPress) {
             return (
                 <NavigationBar
@@ -41,8 +54,10 @@ export default class TabManager extends React.Component {
                     leftButton={
                         <TouchableOpacity
                             style={buttonNavBar}
-                            onPress={this.handleOnPressBack.bind(this)}>
-                        <Text style={styles.cancel}>Cancel</Text>
+                            onPress={()=>{this.props.navigator.pop()}}>
+                        <Image
+                        source={require('../img/back-icon.png')}
+                        style={[{ width: 20, height: 15}]}/>
                         </TouchableOpacity>
                     }/>
             );
@@ -55,11 +70,9 @@ export default class TabManager extends React.Component {
                 statusBar={{style: 'light-content', hidden: false}}
                 leftButton={
                     <TouchableOpacity
-                    style={buttonNavBar}
-                    onPress={this.props.onBurguerMenuPress.bind(this)}>
-                    <Image
-                        source={require('../img/burguer-icon.png')}
-                        style={[{ width: 20, height: 15}]}/>
+                        style={buttonNavBar}
+                        onPress={()=>{this.props.navigator.pop()}}>
+                            <Text style={styles.cancel}>Cancel</Text>
                     </TouchableOpacity>
                 }/>
         );

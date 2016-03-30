@@ -45,13 +45,16 @@ export default class House extends React.Component {
   
   componentWillMount() {
     var houseData = this.props.route.houseData;
+    this.verifyNewDataForHouse(houseData);
+  }
+
+  verifyNewDataForHouse(houseData) {
     this.addressIn = houseData && houseData.address || '';
     this.zipcodeIn = houseData && houseData.zipcode || '';
     this.cityIn = houseData && houseData.city || '';
     this.stateIn = houseData && houseData.state || '';
     this.bedroomsIn = houseData && houseData.bedrooms || 1;
   }
-
 
   onPressCurrentPosition(count) {
     this.setState({animatingPos: true});
@@ -131,6 +134,7 @@ export default class House extends React.Component {
         .then((responseData) => {
             this.setState({savingData: false});
             this.props.route.houseData = responseData.houseData;
+            this.verifyNewDataForHouse(responseData.houseData);
             this.switchToPeople();
         })
         .done();

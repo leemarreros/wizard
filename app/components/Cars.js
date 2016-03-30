@@ -7,6 +7,7 @@ import SideMenu from 'react-native-side-menu';
 import NavigationBarCom from  './NavigationBarCom';
 
 import AddCars from  './AddCars';
+import Summary from  './Summary';
 
 var window = Dimensions.get('window');
 import {
@@ -119,9 +120,8 @@ export default class Cars extends React.Component {
       this.props.navigator.push({
             component: AddCars,
             events: route.events,
-            people: this.props.route.people,
+            people: route.people,
             updateCarsData: this.updateCarsData.bind(this),
-            onBurguerMenuPress: route.onBurguerMenuPress.bind(this),
             navigationBar: (
                 <NavigationBarCom 
                     title={'VEHICLES'}
@@ -130,7 +130,23 @@ export default class Cars extends React.Component {
             )
         });
   }
-
+  
+  summaryPage() {
+      var route = this.props.route;
+      this.props.navigator.push({
+            component: Summary,
+            people: route.people,
+            houseData: route.houseData,
+            cars: this.state.cars,
+            navigationBar: (
+                <NavigationBarCom 
+                    title={'SUMMARY'}
+                    navigator={this.props.navigator}
+                    onBackBtnPress={true}/>
+            )
+        });
+  }
+  
   render() {
     return (
         <View style={{flex: 1, backgroundColor: backgroundClr}}>
@@ -172,7 +188,7 @@ export default class Cars extends React.Component {
             </ScrollView>
             
             <TouchableOpacity
-                onPress={() => {}} 
+                onPress={this.summaryPage.bind(this)} 
                 style={buttonNext}>
                 <View style={btnContent}>
                     <Text style={btnNextText}>Summary</Text>

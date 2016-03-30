@@ -80,7 +80,6 @@ export default class People extends React.Component {
   }
   
   componentWillMount() {
-      console.log('willmount');
     this.firstTimeRetrieve = true;
     this.retrievePeopleData();
     this.props.route.events.addListener('burguerBtnEvent',

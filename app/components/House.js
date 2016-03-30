@@ -96,9 +96,14 @@ export default class House extends React.Component {
       return true;
   }
   
+  updatePeopleDatainHouse(newPeopleData) {
+      this.props.route.houseData.people = newPeopleData;
+  }
+  
   switchToPeople() {
     this.props.navigator.push({
       component: People,
+      updatePeopleDatainHouse: this.updatePeopleDatainHouse.bind(this),
       houseData: this.props.route.houseData,
       navigationBar: (
         <NavigationBarCom

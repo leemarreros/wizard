@@ -61,6 +61,7 @@ export default class People extends React.Component {
         .then((response) => response.json())
         .then((responseData) => {
             people = responseData.peopleData.people;
+            this.props.route.updatePeopleDatainHouse(people);            
             this.newPeopleData = people;
             this.setState({people, updatePeopleData: false});
         })
@@ -111,6 +112,7 @@ export default class People extends React.Component {
             .then((response) => response.json())
             .then((responseData) => {
                 people = responseData.peopleData.people;
+                this.props.route.updatePeopleDatainHouse(people);
                 this.setState({people, updatePeopleData: false});
             })
             .done();

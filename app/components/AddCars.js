@@ -4,6 +4,8 @@ import React from 'react-native';
 import Dimensions from 'Dimensions';
 import NavigationBar from 'react-native-navbar';
 
+import Spinner from  './Spinner';
+
 import {restUrl, brandFont, brandColor, backgroundClr, titleForm, navigationBar, buttonNavBar} from '../utils/globalVariables';
 import {requestHelper, } from '../utils/dbHelper';
 
@@ -174,6 +176,8 @@ export default class AddCars extends React.Component {
                     <Text style={styles.btnSaveText}>SAVE</Text>
                 </View>
             </TouchableOpacity>
+            
+            {this.state.savingData ? (Spinner) : null}
             
         </View>
     );

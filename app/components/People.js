@@ -5,6 +5,8 @@ import Dimensions from 'Dimensions';
 
 import AddPeople from  './AddPeople';
 import Cars from  './Cars';
+import Spinner from  './Spinner';
+
 import NavigationBarCom from  './NavigationBarCom';
 
 import {
@@ -186,7 +188,9 @@ export default class People extends React.Component {
                         <Image source={require('../img/next-icon.png')}/>
                     </View>
                 </TouchableOpacity>
-                
+               
+                {this.state.updatePeopleData ? (Spinner) : null}
+
         </View>
     );
   }

@@ -6,6 +6,7 @@ import NavigationBar from 'react-native-navbar';
 import Geocoder from 'react-native-geocoder';
 
 import People from  './People';
+import Spinner from  './Spinner';
 import NavigationBarCom from  './NavigationBarCom';
 import {restUrl, brandFont, brandColor, backgroundClr, titleForm, navigationBar, buttonNavBar} from '../utils/globalVariables';
 import {requestHelper, } from '../utils/dbHelper';
@@ -238,6 +239,8 @@ export default class House extends React.Component {
                     <Image source={require('../img/next-icon.png')}/>
                 </View>
             </TouchableOpacity>
+            
+            {this.state.savingData ? (Spinner) : null}
         </View>
     );
   }

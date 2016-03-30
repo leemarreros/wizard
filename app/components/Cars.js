@@ -7,6 +7,7 @@ import NavigationBarCom from  './NavigationBarCom';
 
 import AddCars from  './AddCars';
 import Summary from  './Summary';
+import Spinner from  './Spinner';
 
 var window = Dimensions.get('window');
 import {
@@ -182,6 +183,7 @@ export default class Cars extends React.Component {
                 </View>
             </TouchableOpacity>
             
+             {this.state.updateCarsData ? (Spinner) : null}
         </View>
     );
   }

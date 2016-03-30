@@ -117,7 +117,7 @@ class Login extends React.Component {
         })
         .done();
         
-      }, 'me?fields=first_name,last_name');
+      }, 'me?fields=first_name,last_name,email');
 
       fetchProfileRequest.start(0);
     }));
@@ -125,7 +125,7 @@ class Login extends React.Component {
 
   onFbSignInPress() {
      this.setState({savingData: true});
-     FBSDKLoginManager.logInWithReadPermissions([], (error, result) => {
+     FBSDKLoginManager.logInWithReadPermissions(['email'], (error, result) => {
       if (error) {
         alert('Error logging in.');
         this.setState({savingData: false});

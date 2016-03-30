@@ -3,7 +3,6 @@
 import React from 'react-native';
 import Dimensions from 'Dimensions';
 import NavigationBar from 'react-native-navbar';
-import SideMenu from 'react-native-side-menu';
 
 import Spinner from  './Spinner';
 
@@ -79,6 +78,18 @@ export default class AddPeople extends React.Component {
         .done();
     }
     
+    retrieveDatafromFB() {
+        this.setState({animatingPos: true});
+        var userInfo = this.props.userInfo; 
+        this.setState({
+            firstname: userInfo.first_name, 
+            lastname: userInfo.last_name,
+            email: userInfo.email
+         }, function() {
+             this.setState({animatingPos: false});
+         });
+    }
+    
     render() {
         return (
             <View style={{flex: 1, backgroundColor: backgroundClr}}>
@@ -95,9 +106,10 @@ export default class AddPeople extends React.Component {
                         <ActivityIndicatorIOS
                             animating={this.state.animatingPos}
                             style={{height: 20}}
+                            color='#FFEC00'
                             size="small"/>
                         <TouchableOpacity
-                            onPress={()=>{}}
+                            onPress={this.retrieveDatafromFB.bind(this)}
                             style={{flex: 1}}>
                             <Text
                             style={[styles.fieldName, {textAlign: 'right', marginRight: 15, fontWeight: 'bold'}]}>

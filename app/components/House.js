@@ -151,6 +151,7 @@ export default class House extends React.Component {
                 <ActivityIndicatorIOS
                     animating={this.state.animatingPos}
                     style={{height: 20}}
+                    color='#FFEC00'
                     size="small"/>
                 <TouchableOpacity
                     onPress={this.onPressCurrentPosition.bind(this)}

@@ -1,8 +1,6 @@
 'use strict';
 
 import Login from './app/components/Login';
-import SideMenu from 'react-native-side-menu';
-import SideMenuLeft from './app/components/SideMenuLeft';
 var EventEmitter = require('EventEmitter');
 
 import React, {

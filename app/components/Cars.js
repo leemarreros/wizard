@@ -30,10 +30,43 @@ let {
   Image,
   StyleSheet,
   ScrollView,
+  Component,
   AlertIOS,
   ProgressViewIOS,
   TouchableOpacity
 } = React;
+
+class ImageSwitcher extends Component{
+
+  render() {
+    var image;
+     
+    switch(this.props.i % 5) {
+        case 0:
+            image = <Image style={this.props.style} source={require('../img/car-model-1.png')}/>;
+            break;
+        case 1:
+            image = <Image style={this.props.style} source={require('../img/car-model-2.png')}/>;
+            break;
+        case 2:
+            image = <Image style={this.props.style} source={require('../img/car-model-3.png')}/>;
+            break;
+        case 3:
+            image = <Image style={this.props.style} source={require('../img/car-model-4.png')}/>;
+            break;
+        case 4:
+            image = <Image style={this.props.style} source={require('../img/car-model-5.png')}/>;
+            break;
+        default:
+    }
+    return(
+        <View style={{width: 50, height: 50, backgroundColor: 'black'}}>
+            {image}
+        </View>
+    );
+  }
+
+}
 
 export default class Cars extends React.Component {
 
@@ -155,7 +188,7 @@ export default class Cars extends React.Component {
                             <View key={i} style={styles.rowPersonData}>
                                 <View style={styles.wrapperCircle}>
                                     <View style={styles.circle}>
-                                        <Text style={styles.oneLetter}>C</Text>
+                                        <ImageSwitcher i={i} style={styles.imageCar}/>
                                         <TouchableOpacity 
                                             style={styles.deleteIconBtn} 
                                             onPress={this.onHandleDeletePerson.bind(this, car._id, car.ownerId)}>
@@ -233,6 +266,10 @@ var styles = StyleSheet.create({
         borderWidth: 2,
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: '#2981E8',
+    },
+    imageCar: {
+        flex: 1,
     },
     oneLetter: {
         fontFamily: brandFont,

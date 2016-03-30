@@ -118,16 +118,15 @@ export default class House extends React.Component {
     body.bedrooms = this.state.bedrooms;
     
     if (this.newHouseData()) {
-        console.log('newData')
         fetch(requestHelper(url, body, 'POST'))
         .then((response) => response.json())
         .then((responseData) => {
             this.setState({savingData: false});
-            this.switchToPeople()
+            this.props.route.houseData = responseData.houseData;
+            this.switchToPeople();
         })
         .done();
     } else {
-        console.log('no newData')        
         this.switchToPeople();
         this.setState({savingData: false});
     }
